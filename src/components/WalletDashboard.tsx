@@ -57,36 +57,39 @@ const WalletDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 space-y-6">
-      {/* ✅ Header */}
-      <div className="flex items-center justify-between animate-slide-up">
+    <div className="min-h-screen bg-background p-4 lg:p-8 space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between animate-fade-in">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Welcome to Aiva
+          <h1 className="text-3xl lg:text-4xl font-light text-foreground mb-2">
+            Wallet Dashboard
           </h1>
-          <p className="text-muted-foreground mt-1">Your intelligent currency exchange wallet</p>
+          <p className="text-muted-foreground">Multi-currency exchange platform</p>
         </div>
-        <Button variant="ghost" size="icon" className="hover-scale">
+        <Button variant="ghost" size="icon" className="hover:bg-accent">
           <SettingsIcon className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* 💰 Balance blocks - 3 cards for USD, EUR, AUD */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Balance Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {Object.entries(walletBalances).map(([currency, amount], index) => (
-          <Card key={currency} className="bg-gradient-card shadow-card hover:shadow-glow transition-all duration-300 hover-scale animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+          <Card key={currency} className="bg-card shadow-card hover:shadow-glow transition-all duration-300 border border-border animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center animate-glow-pulse">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                     {getCurrencyIcon(currency)}
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground font-medium">{currency}</div>
-                    <div className="text-2xl font-bold text-foreground">
-                      {getCurrencySymbol(currency)}{amount.toLocaleString()}
+                    <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">{currency}</div>
+                    <div className="text-2xl font-semibold text-foreground mt-1">
+                      {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </div>
                   </div>
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Available
                 </div>
               </div>
             </CardContent>
@@ -94,98 +97,109 @@ const WalletDashboard = () => {
         ))}
       </div>
 
-      {/* 🔁 FX Converter block */}
-      <Card className="shadow-card animate-fade-in" style={{ animationDelay: "0.3s" }}>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+      {/* Currency Converter */}
+      <Card className="bg-card shadow-card border border-border animate-fade-in" style={{ animationDelay: "0.3s" }}>
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center space-x-2 text-lg font-medium">
             <RefreshCwIcon className="h-5 w-5 text-primary" />
-            <span>Currency Converter</span>
+            <span>Currency Exchange</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
+            <div className="lg:col-span-2">
+              <label className="text-sm font-medium text-muted-foreground mb-2 block">Amount</label>
               <Input
                 type="number"
                 value={convertAmount}
                 onChange={(e) => setConvertAmount(e.target.value)}
-                placeholder="Enter amount"
-                className="text-lg font-medium h-12"
+                placeholder="0.00"
+                className="text-lg font-medium h-12 bg-input border-border"
               />
             </div>
-            <Select value={fromCurrency} onValueChange={setFromCurrency}>
-              <SelectTrigger className="w-24 h-12 bg-card">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-border">
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-                <SelectItem value="AUD">AUD</SelectItem>
-              </SelectContent>
-            </Select>
-            <ArrowRightIcon className="h-5 w-5 text-primary animate-pulse" />
-            <Select value={toCurrency} onValueChange={setToCurrency}>
-              <SelectTrigger className="w-24 h-12 bg-card">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-border">
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-                <SelectItem value="AUD">AUD</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground mb-2 block">From</label>
+              <Select value={fromCurrency} onValueChange={setFromCurrency}>
+                <SelectTrigger className="h-12 bg-input border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="AUD">AUD</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center justify-center">
+              <ArrowRightIcon className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground mb-2 block">To</label>
+              <Select value={toCurrency} onValueChange={setToCurrency}>
+                <SelectTrigger className="h-12 bg-input border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="AUD">AUD</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {convertAmount && (
-            <div className="p-4 rounded-lg bg-gradient-primary/10 border border-primary/20 animate-scale-in">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">
+            <div className="p-6 rounded-lg bg-accent/50 border border-primary/20 animate-scale-in">
+              <div className="text-center space-y-2">
+                <div className="text-2xl font-semibold text-foreground">
+                  {getCurrencySymbol(toCurrency)}{getConvertedAmount()}
+                </div>
+                <div className="text-sm text-muted-foreground">
                   {convertAmount} {fromCurrency} = {getConvertedAmount()} {toCurrency}
                 </div>
-                <div className="text-sm text-muted-foreground mt-1">
-                  Exchange rate: 1 {fromCurrency} = {(exchangeRates[`${fromCurrency}-${toCurrency}`] || 1).toFixed(4)} {toCurrency}
+                <div className="text-xs text-muted-foreground">
+                  Rate: 1 {fromCurrency} = {(exchangeRates[`${fromCurrency}-${toCurrency}`] || 1).toFixed(4)} {toCurrency}
                 </div>
               </div>
             </div>
           )}
 
-          {/* 🎨 Buttons */}
           <div className="flex gap-3">
-            <Button variant="gradient" className="flex-1 h-12 hover-scale">
+            <Button className="flex-1 h-12 bg-primary hover:bg-primary/90">
               <RefreshCwIcon className="h-4 w-4 mr-2" />
-              Convert
+              Convert Now
             </Button>
-            <Button variant="wallet" className="flex-1 h-12 hover-scale">
+            <Button variant="outline" className="flex-1 h-12">
               <SparklesIcon className="h-4 w-4 mr-2" />
-              Get FX Suggestion
+              Get Quote
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* 🧾 Transaction log */}
-      <Card className="shadow-card animate-fade-in" style={{ animationDelay: "0.4s" }}>
-        <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+      {/* Transaction History */}
+      <Card className="bg-card shadow-card border border-border animate-fade-in" style={{ animationDelay: "0.4s" }}>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {transactionHistory.map((tx, index) => (
             <div 
               key={tx.id} 
-              className="flex items-center justify-between p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-all duration-300 hover-scale animate-fade-in"
+              className="flex items-center justify-between p-4 rounded-lg bg-accent/30 hover:bg-accent/50 transition-all duration-200 border border-transparent hover:border-border animate-fade-in"
               style={{ animationDelay: `${0.5 + index * 0.1}s` }}
             >
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                  <Badge variant="secondary" className="text-xs font-medium">
+                  <Badge variant="secondary" className="text-xs font-medium bg-muted text-muted-foreground">
                     {tx.from}
                   </Badge>
                   <ArrowRightIcon className="h-3 w-3 text-muted-foreground" />
-                  <Badge variant="secondary" className="text-xs font-medium">
+                  <Badge variant="secondary" className="text-xs font-medium bg-muted text-muted-foreground">
                     {tx.to}
                   </Badge>
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-foreground font-medium">
                   {getCurrencySymbol(tx.from)}{tx.fromAmount} → {getCurrencySymbol(tx.to)}{tx.toAmount}
                 </div>
               </div>

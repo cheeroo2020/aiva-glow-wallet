@@ -8,43 +8,43 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 195 50% 98%;
-    --foreground: 195 100% 15%;
+    --background: 220 14% 96%;
+    --foreground: 220 26% 14%;
 
-    --card: 195 50% 96%;
-    --card-foreground: 195 100% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
 
-    --popover: 195 50% 96%;
-    --popover-foreground: 195 100% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
 
-    --primary: 190 85% 75%;
-    --primary-foreground: 195 100% 15%;
-    --primary-glow: 185 85% 85%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 217 91% 70%;
 
-    --secondary: 195 50% 90%;
-    --secondary-foreground: 195 100% 15%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 26% 14%;
 
-    --muted: 195 30% 88%;
-    --muted-foreground: 195 20% 40%;
+    --muted: 220 13% 91%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 175 80% 70%;
-    --accent-foreground: 195 100% 15%;
+    --accent: 220 13% 91%;
+    --accent-foreground: 220 26% 14%;
 
-    --success: 142 71% 45%;
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 195 30% 85%;
-    --input: 195 30% 92%;
-    --ring: 190 85% 75%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
 
-    /* Custom wallet theme - Light Oceanic */
-    --gradient-primary: linear-gradient(135deg, hsl(185 85% 85%), hsl(175 80% 75%));
-    --gradient-card: linear-gradient(135deg, hsl(195 50% 96%), hsl(190 40% 92%));
-    --shadow-glow: 0 0 30px hsl(185 85% 75% / 0.4);
-    --shadow-card: 0 8px 32px hsl(195 30% 85% / 0.3);
+    /* Modern Fintech theme - Blue/Grey */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(225 84% 65%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(220 14% 98%));
+    --shadow-glow: 0 0 30px hsl(217 91% 60% / 0.15);
+    --shadow-card: 0 2px 20px hsl(220 13% 85% / 0.2);
 
     --radius: 0.5rem;
 
