@@ -17,18 +17,18 @@ All colors MUST be HSL.
     --popover: 240 10% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 263 70% 50%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 263 70% 65%;
+    --primary: 190 85% 75%;
+    --primary-foreground: 195 100% 15%;
+    --primary-glow: 185 85% 85%;
 
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 195 50% 90%;
+    --secondary-foreground: 195 100% 15%;
 
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 195 30% 88%;
+    --muted-foreground: 195 20% 40%;
 
-    --accent: 263 70% 50%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 175 80% 70%;
+    --accent-foreground: 195 100% 15%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 98%;
@@ -38,13 +38,13 @@ All colors MUST be HSL.
 
     --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: 263 70% 50%;
+    --ring: 190 85% 75%;
 
-    /* Custom wallet theme */
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 50%), hsl(280 70% 65%));
-    --gradient-card: linear-gradient(135deg, hsl(240 10% 6%), hsl(240 8% 8%));
-    --shadow-glow: 0 0 30px hsl(263 70% 50% / 0.3);
-    --shadow-card: 0 8px 32px hsl(240 10% 3.9% / 0.5);
+    /* Custom wallet theme - Light Oceanic */
+    --gradient-primary: linear-gradient(135deg, hsl(185 85% 85%), hsl(175 80% 75%));
+    --gradient-card: linear-gradient(135deg, hsl(195 50% 96%), hsl(190 40% 92%));
+    --shadow-glow: 0 0 30px hsl(185 85% 75% / 0.4);
+    --shadow-card: 0 8px 32px hsl(195 30% 85% / 0.3);
 
     --radius: 0.5rem;
 
