@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRightIcon, SettingsIcon, SparklesIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon } from "lucide-react";
+import { ArrowRightIcon, SettingsIcon, SparklesIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon, TrendingUpIcon, BrainCircuitIcon } from "lucide-react";
 import { useState } from "react";
 
 const WalletDashboard = () => {
@@ -33,6 +33,15 @@ const WalletDashboard = () => {
     { id: 4, from: "USD", to: "AUD", fromAmount: "200.00", toAmount: "296.42", date: "2024-07-28", time: "11:20", status: "completed" },
     { id: 5, from: "EUR", to: "USD", fromAmount: "150.00", toAmount: "164.07", date: "2024-07-27", time: "13:55", status: "failed" },
   ];
+
+  const smartRecommendation = {
+    fromCurrency: "EUR",
+    toCurrency: "USD", 
+    suggestedAmount: "500.00",
+    rationale: "EUR is currently at a 3-month high against USD. Market analysis suggests favorable rates for the next 2-3 days before potential reversal. Consider converting now to maximize returns.",
+    confidence: "High",
+    potentialGain: "2.8%"
+  };
 
   const getConvertedAmount = () => {
     const rate = exchangeRates[`${fromCurrency}-${toCurrency}`] || 1;
@@ -195,6 +204,73 @@ const WalletDashboard = () => {
             <Button variant="outline" className="flex-1 h-12">
               <SparklesIcon className="h-4 w-4 mr-2" />
               Get Quote
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Smart FX Recommendations */}
+      <Card className="bg-card shadow-card border border-border animate-fade-in" style={{ animationDelay: "0.35s" }}>
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center space-x-2 text-lg font-medium">
+            <BrainCircuitIcon className="h-5 w-5 text-primary" />
+            <span>Smart FX Recommendation</span>
+            <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/10 text-xs">
+              AI Powered
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Recommendation Header */}
+          <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  {getCurrencyIcon(smartRecommendation.fromCurrency)}
+                </div>
+                <TrendingUpIcon className="h-4 w-4 text-primary" />
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  {getCurrencyIcon(smartRecommendation.toCurrency)}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-medium text-foreground">
+                  {smartRecommendation.fromCurrency} → {smartRecommendation.toCurrency}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Suggested: {getCurrencySymbol(smartRecommendation.fromCurrency)}{smartRecommendation.suggestedAmount}
+                </div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm font-semibold text-success">
+                +{smartRecommendation.potentialGain}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Potential gain
+              </div>
+            </div>
+          </div>
+
+          {/* AI Rationale */}
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <SparklesIcon className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-foreground">AI Analysis</span>
+              <Badge variant="outline" className="text-xs">
+                {smartRecommendation.confidence} Confidence
+              </Badge>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed pl-6">
+              {smartRecommendation.rationale}
+            </p>
+          </div>
+
+          {/* Action Button */}
+          <div className="pt-2">
+            <Button className="w-full h-12 bg-primary hover:bg-primary/90 font-medium">
+              <RefreshCwIcon className="h-4 w-4 mr-2" />
+              Convert {smartRecommendation.fromCurrency} to {smartRecommendation.toCurrency} Now
             </Button>
           </div>
         </CardContent>
