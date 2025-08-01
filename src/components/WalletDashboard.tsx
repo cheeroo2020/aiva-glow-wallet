@@ -27,15 +27,38 @@ const WalletDashboard = () => {
   };
 
   const transactionHistory = [
-    { id: 1, from: "USD", to: "EUR", fromAmount: "100.00", toAmount: "91.42", date: "Jul 31", time: "14:30" },
-    { id: 2, from: "AUD", to: "USD", fromAmount: "101.15", toAmount: "68.21", date: "Jul 30", time: "09:15" },
-    { id: 3, from: "EUR", to: "AUD", fromAmount: "100.00", toAmount: "162.01", date: "Jul 29", time: "16:45" },
-    { id: 4, from: "USD", to: "AUD", fromAmount: "200.00", toAmount: "296.42", date: "Jul 28", time: "11:20" },
+    { id: 1, from: "USD", to: "EUR", fromAmount: "100.00", toAmount: "91.42", date: "2024-07-31", time: "14:30", status: "completed" },
+    { id: 2, from: "AUD", to: "USD", fromAmount: "101.15", toAmount: "68.21", date: "2024-07-30", time: "09:15", status: "completed" },
+    { id: 3, from: "EUR", to: "AUD", fromAmount: "100.00", toAmount: "162.01", date: "2024-07-29", time: "16:45", status: "pending" },
+    { id: 4, from: "USD", to: "AUD", fromAmount: "200.00", toAmount: "296.42", date: "2024-07-28", time: "11:20", status: "completed" },
+    { id: 5, from: "EUR", to: "USD", fromAmount: "150.00", toAmount: "164.07", date: "2024-07-27", time: "13:55", status: "failed" },
   ];
 
   const getConvertedAmount = () => {
     const rate = exchangeRates[`${fromCurrency}-${toCurrency}`] || 1;
     return (parseFloat(convertAmount) * rate).toFixed(2);
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return <Badge className="bg-success/10 text-success border-success/20 hover:bg-success/10">Completed</Badge>;
+      case 'pending':
+        return <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20 hover:bg-orange-500/10">Pending</Badge>;
+      case 'failed':
+        return <Badge className="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/10">Failed</Badge>;
+      default:
+        return <Badge variant="secondary">Unknown</Badge>;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: date.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+    });
   };
 
   const getCurrencyIcon = (currency: string) => {
@@ -180,35 +203,59 @@ const WalletDashboard = () => {
       {/* Transaction History */}
       <Card className="bg-card shadow-card border border-border animate-fade-in" style={{ animationDelay: "0.4s" }}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
+          <CardTitle className="text-lg font-medium">Transaction History</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          {transactionHistory.map((tx, index) => (
-            <div 
-              key={tx.id} 
-              className="flex items-center justify-between p-4 rounded-lg bg-accent/30 hover:bg-accent/50 transition-all duration-200 border border-transparent hover:border-border animate-fade-in"
-              style={{ animationDelay: `${0.5 + index * 0.1}s` }}
-            >
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Badge variant="secondary" className="text-xs font-medium bg-muted text-muted-foreground">
+        <CardContent className="p-0">
+          {/* Table Header */}
+          <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-muted/30 border-b border-border text-sm font-medium text-muted-foreground">
+            <div className="col-span-3">Date</div>
+            <div className="col-span-3">Currency Pair</div>
+            <div className="col-span-3">Amount</div>
+            <div className="col-span-3">Status</div>
+          </div>
+          
+          {/* Table Rows */}
+          <div className="divide-y divide-border">
+            {transactionHistory.map((tx, index) => (
+              <div 
+                key={tx.id} 
+                className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-accent/30 transition-colors duration-200 animate-fade-in"
+                style={{ animationDelay: `${0.5 + index * 0.05}s` }}
+              >
+                {/* Date Column */}
+                <div className="col-span-3 flex flex-col">
+                  <span className="text-sm font-medium text-foreground">{formatDate(tx.date)}</span>
+                  <span className="text-xs text-muted-foreground">{tx.time}</span>
+                </div>
+                
+                {/* Currency Pair Column */}
+                <div className="col-span-3 flex items-center space-x-2">
+                  <Badge variant="outline" className="text-xs font-mono bg-background">
                     {tx.from}
                   </Badge>
                   <ArrowRightIcon className="h-3 w-3 text-muted-foreground" />
-                  <Badge variant="secondary" className="text-xs font-medium bg-muted text-muted-foreground">
+                  <Badge variant="outline" className="text-xs font-mono bg-background">
                     {tx.to}
                   </Badge>
                 </div>
-                <div className="text-sm text-foreground font-medium">
-                  {getCurrencySymbol(tx.from)}{tx.fromAmount} → {getCurrencySymbol(tx.to)}{tx.toAmount}
+                
+                {/* Amount Column */}
+                <div className="col-span-3 flex flex-col">
+                  <span className="text-sm font-medium text-foreground">
+                    {getCurrencySymbol(tx.to)}{tx.toAmount}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    from {getCurrencySymbol(tx.from)}{tx.fromAmount}
+                  </span>
+                </div>
+                
+                {/* Status Column */}
+                <div className="col-span-3 flex items-center">
+                  {getStatusBadge(tx.status)}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-foreground">{tx.date}</div>
-                <div className="text-xs text-muted-foreground">{tx.time}</div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>
