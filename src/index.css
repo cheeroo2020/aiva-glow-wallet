@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 195 50% 98%;
+    --foreground: 195 100% 15%;
 
-    --card: 240 10% 6%;
-    --card-foreground: 0 0% 98%;
+    --card: 195 50% 96%;
+    --card-foreground: 195 100% 15%;
 
-    --popover: 240 10% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 195 50% 96%;
+    --popover-foreground: 195 100% 15%;
 
     --primary: 190 85% 75%;
     --primary-foreground: 195 100% 15%;
@@ -36,8 +36,8 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
+    --border: 195 30% 85%;
+    --input: 195 30% 92%;
     --ring: 190 85% 75%;
 
     /* Custom wallet theme - Light Oceanic */
