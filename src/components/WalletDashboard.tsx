@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRightIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon } from "lucide-react";
+import { ArrowRightIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon, SparklesIcon, TrendingUpIcon } from "lucide-react";
 import { useState } from "react";
 
 const WalletDashboard = () => {
@@ -111,6 +111,37 @@ const WalletDashboard = () => {
             </Card>
           ))}
         </div>
+
+        {/* Smart FX Recommendations */}
+        <Card className="bg-white border border-gray-200 shadow-sm rounded-xl">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <SparklesIcon className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Smart FX Recommendation</h3>
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs">Today</Badge>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <TrendingUpIcon className="h-4 w-4 text-green-600" />
+                    <span className="text-sm font-medium text-gray-900">Convert AUD to USD</span>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    AUD is currently strong against USD with favorable rates. Market analysis suggests this is an optimal time to convert with potential 2.1% gain over typical rates.
+                  </p>
+                </div>
+                
+                <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
+                  Convert Now
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* FX Converter */}
         <Card className="bg-white border border-gray-200 shadow-sm">
