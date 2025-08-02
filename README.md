@@ -1,27 +1,33 @@
-# Wallet – Multi-Currency Wallet MVP
+# Aiva Glow Wallet 🌐💱
 
-Prototyped in Lovable.dev; managed via Jira and hosted in GitHub.
+**Aiva Glow Wallet** is a smart, design-first multi-currency wallet that helps users manage and convert between currencies with AI-optimised FX logic.
 
-## Key Features
-- Dashboard: balances in AUD, USD, EUR
-- FX Converter UI
-- Smart FX Recommendation mock interface
-- Transaction history log
+## 🔧 Tech Stack
+- **UI/UX:** Lovable.dev
+- **Planning:** Jira (team-managed, sprint-based)
+- **Repository:** GitHub
+- **AI:** GPT-based Smart FX recommendation engine
+- **Data:** Static `fxrates.json` (mock data)
 
-## Tech Stack
-- Lovable.dev (UI prototype)
-- Jira (project planning & tracking)
-- GitHub (version control & documentation)
-- GPT / Prompt logic (AI recommendation layer)
+## 📁 Directory Structure
+- `/designs`: Wallet UI mockups from Lovable
+- `/mockdata`: Currency rate data files
+- `/ai`: GPT prompts and logic
 
-## Repository Structure
-- `/designs/` – UI screens exported from Lovable
-- `/mockdata/` – fxrates.json & transactions.json
-- `/ai/` – smart FX prompt logic
+## 🏁 Sprint 1 (Current)
+- [x] Set up Jira with Epics & Tasks
+- [x] Create UI layout for dashboard
+- [ ] Add 3 currency balance blocks
+- [ ] Build FX converter screen
+- [ ] Upload designs to GitHub
+
+## 🛣 Roadmap Preview
+1. Smart FX AI Engine
+2. API data simulation
+3. Interactive UI integration
+4. GitHub Pages / Demo
+5. Pitch deck and launch
 
 ---
 
-## Next Actions
-- Integrate FX trend logic
-- Add AI suggestions to UI
-- Prepare demo-ready version and pitch documentation
+✨ Built with love, curiosity, and big ambition.
