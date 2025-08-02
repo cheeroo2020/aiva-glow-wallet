@@ -42,11 +42,11 @@ const WalletDashboard = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">Completed</Badge>;
+        return <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200 hover:bg-green-50">Completed</Badge>;
       case 'pending':
-        return <Badge variant="secondary" className="bg-orange-50 text-orange-700 border-orange-200">Pending</Badge>;
+        return <Badge variant="secondary" className="bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50">Pending</Badge>;
       case 'failed':
-        return <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-200">Failed</Badge>;
+        return <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-200 hover:bg-red-50">Failed</Badge>;
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -211,33 +211,60 @@ const WalletDashboard = () => {
         </Card>
 
         {/* Transaction History */}
-        <Card className="bg-white border border-gray-200 shadow-sm">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-medium text-gray-900">Recent Transactions</CardTitle>
+        <Card className="bg-white border border-gray-200 shadow-lg rounded-xl">
+          <CardHeader className="pb-6 border-b border-gray-100">
+            <CardTitle className="text-lg font-semibold text-gray-900">Recent Transactions</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-gray-100">
-              {transactionHistory.map((tx) => (
-                <div key={tx.id} className="p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-2 text-sm">
-                        <span className="px-2 py-1 bg-gray-100 rounded text-gray-700 font-mono text-xs">
-                          {tx.from}
-                        </span>
-                        <ArrowRightIcon className="h-3 w-3 text-gray-400" />
-                        <span className="px-2 py-1 bg-gray-100 rounded text-gray-700 font-mono text-xs">
-                          {tx.to}
-                        </span>
-                      </div>
-                      <div className="text-sm text-gray-900">
-                        {getCurrencySymbol(tx.to)}{tx.toAmount}
-                      </div>
+            {/* Table Header */}
+            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-slate-50/50 border-b border-gray-100">
+              <div className="col-span-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</div>
+              <div className="col-span-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Currency Pair</div>
+              <div className="col-span-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</div>
+              <div className="col-span-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</div>
+            </div>
+            
+            {/* Table Rows */}
+            <div className="divide-y divide-gray-50">
+              {transactionHistory.map((tx, index) => (
+                <div 
+                  key={tx.id} 
+                  className={`grid grid-cols-12 gap-4 px-6 py-4 hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-indigo-50/30 transition-all duration-200 ${
+                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                  }`}
+                >
+                  {/* Date Column */}
+                  <div className="col-span-3 flex flex-col">
+                    <span className="text-sm font-medium text-gray-900">{formatDate(tx.date)}</span>
+                    <span className="text-xs text-gray-500">2024</span>
+                  </div>
+                  
+                  {/* Currency Pair Column */}
+                  <div className="col-span-3 flex items-center space-x-2">
+                    <div className="flex items-center space-x-1.5">
+                      <span className="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md text-xs font-semibold border border-purple-200">
+                        {tx.from}
+                      </span>
+                      <ArrowRightIcon className="h-3 w-3 text-gray-400" />
+                      <span className="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-md text-xs font-semibold border border-teal-200">
+                        {tx.to}
+                      </span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <span className="text-sm text-gray-500">{formatDate(tx.date)}</span>
-                      {getStatusBadge(tx.status)}
-                    </div>
+                  </div>
+                  
+                  {/* Amount Column */}
+                  <div className="col-span-3 flex flex-col">
+                    <span className="text-sm font-semibold text-gray-900">
+                      {getCurrencySymbol(tx.to)}{tx.toAmount}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      from {getCurrencySymbol(tx.from)}{tx.fromAmount}
+                    </span>
+                  </div>
+                  
+                  {/* Status Column */}
+                  <div className="col-span-3 flex items-center">
+                    {getStatusBadge(tx.status)}
                   </div>
                 </div>
               ))}
