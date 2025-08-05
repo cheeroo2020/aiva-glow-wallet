@@ -1,103 +1,133 @@
 # 🌐 Aiva Glow Wallet
 
-**A next-gen multi-currency wallet** blending smart FX recommendations, AI-generated trend logic, and DeFi-inspired architecture. Built as a solo founder journey to explore the future of money, digital wallets, and intelligent cross-border finance.
+**A next-gen multi-currency wallet**, built by a solo founder exploring the future of money — combining smart FX recommendations, live trend analysis, blockchain rails, and AI logic in a single prototype.
 
 ---
 
-## 🚀 Project Vision
+## 🚀 Vision
 
-Aiva Glow Wallet is not just a product — it's a learning lab to understand and simulate the future of fintech, powered by:
+Aiva Glow is not just a wallet — it's a journey to learn, build, and reimagine how money moves across borders. The project blends:
 
-- 💱 Smart FX Recommendation Engines  
-- 📊 Real-Time FX Trend Analysis  
-- 🤖 AI-Driven UX Suggestions  
-- 🌍 Multi-Currency Balances (USD, EUR, AUD)  
-- ⛓️ Foundations for Blockchain/DeFi Interoperability  
+- 💱 Real-time FX trend data
+- 🧠 AI UX for smarter conversions
+- 💸 Multi-currency management (USD, EUR, AUD)
+- 🔐 DeFi-inspired architecture
+- ✅ Compliance-first thinking (KYC/AML)
+- 🌏 A global-first mindset
 
 ---
 
 ## 🧱 Project Modules
 
-### 1. 💻 Wallet UI (`/lovable_ui`)
-Interactive UI prototypes built using [Lovable.dev](https://lovable.dev). Focused on crafting clean, functional mockups for key wallet features:
-
-- ✅ Wallet Dashboard
-- ✅ Currency Balance Blocks (USD, EUR, AUD)
-- ✅ FX Converter Input & Result
+### 1. Wallet UI (`/lovable-ui`)
+UI built on [Lovable.dev](https://lovable.dev), showing:
+- ✅ FX Wallet Dashboard
+- ✅ 3 Currency Balances
+- ✅ FX Conversion Interface
 - ✅ Static Transaction Log
-- ✅ AI Suggestion Card (Smart FX UI)
 
-> **Status:** All Sprint 1 UI components ✅ Completed  
+> **Status:** Complete ✅ (Sprint 1)
 
 ---
 
-### 2. 🧠 Smart FX AI Engine (`/ai`)
-Backend logic layer under development. Will include prompt-based recommendations using GPT-style models and real-time FX data insights.
+### 2. Smart FX AI Engine (`/ai`)
+Early version of a GPT-powered prompt engine that suggests whether to convert or wait.
+- ✅ Drafted GPT prompt logic
+- ✅ Started UI mockup for AI suggestion
+- ⏳ Trend simulation in progress
 
-- 🔄 Smart FX GPT prompt logic  
-- 🔄 Trend-based FX action simulation  
-- 🔄 Interactive FX reasoning  
+> **Status:** In Progress 🔧
 
-> **Status:** In Progress 🔧  
+---
+
+### 3. FX Data & API Layer (`/mockdata`)
+Mock backend logic using sample JSON and trend rules.
+- ⏳ 7-day FX dataset
+- ⏳ Convert vs wait logic
+- ⏳ Mock simulation pipeline
+
+> **Status:** Planned for Sprint 2
+
+---
+
+### 4. Documentation & GitHub (`/docs`)
+Tracks every step, mistake, and win in building this wallet solo.
+- ✅ GitHub repo setup
+- ✅ Daily `logbook.md` created
+- ✅ Clear folder structure (`/ai`, `/mockdata`, `/lovable-ui`)
+
+> **Status:** Active & maintained
+
+---
+
+### 5. Demo & Launch
+Prototype planning for a working demo in the coming months.
+- 🗓️ Milestone tracking in Jira
+- 🧾 Pitch deck in Notion (planned)
+- 🧪 Future testing plan
+
+> **Status:** Planning stage
+
+---
+
+### 6. Compliance & Risk Management (`/compliance`)  
+🆕 Added 5 August 2025 to reflect the importance of regulatory alignment.
+
+- 🧾 KYC/AML flow design
+- 🔐 Privacy UX thinking
+- 🌐 Cross-border regulation research
+- 🧠 AI guardrails + ethics
+- 📋 Audit trails & fraud detection
+
+> **Status:** Epic created in Jira, work begins in Sprint 2
 
 ---
 
 ## 📆 Sprint 1 Summary (1 Aug – 15 Aug)
 
-| Task ID  | Title                                                | Status      |
-|----------|------------------------------------------------------|-------------|
-| AIVA-4   | Design wallet dashboard in Lovable                   | ✅ Done     |
-| AIVA-5   | Add 3 currency balance blocks                        | ✅ Done     |
-| AIVA-6   | Create FX converter UI                               | ✅ Done     |
-| AIVA-7   | Display static transaction log                       | ✅ Done     |
-| AIVA-9   | Draft Smart FX GPT prompt logic                      | ⏳ To Do    |
-| AIVA-10  | Create Lovable UI element for Smart FX suggestion    | ✅ Done     |
-
----
-
-## 🧠 Learning Goals
-
-This project is hands-on training to learn:
-- Coding UI using prototyping tools
-- Building AI UX flows
-- Using Jira for Agile sprints
-- GitHub project organisation & version control
-- Financial logic design for currency and FX systems
+| Task ID  | Title                                  | Status     |
+|----------|----------------------------------------|------------|
+| AIVA-4   | Wallet Dashboard in Lovable            | ✅ Done     |
+| AIVA-5   | 3-Currency Balance UI                  | ✅ Done     |
+| AIVA-6   | FX Conversion Input UI                 | ✅ Done     |
+| AIVA-7   | Static Transaction Log                 | ✅ Done     |
+| AIVA-9   | Draft Smart FX GPT Prompt              | ✅ Done     |
+| AIVA-10  | Lovable UI for AI Suggestions          | ✅ Done     |
+| AIVA-11  | Test GPT with FX Trend Inputs          | ⏳ To Do    |
 
 ---
 
 ## 🛠 Tech Stack
 
-- 🎨 [Lovable.dev](https://lovable.dev) — UI prototyping tool  
-- ⚙️ GitHub — version control and documentation  
-- 📋 Jira — agile sprint & issue tracking  
-- 🤖 GPT-style logic — for FX simulation (upcoming)  
-- 🌐 React/Vite (planned) — for frontend integration  
-- 📡 Open-source FX APIs (planned)  
+- 🖌️ [Lovable.dev](https://lovable.dev) for UI/UX
+- 🧠 GPT for Smart FX Engine (Prompt-based)
+- 🗂 GitHub for version control
+- 📊 JSON-based mock FX API
+- ✅ Jira for agile planning
 
 ---
 
-## 📍 What’s Next
+## 🧭 What’s Next (Sprint 2)
 
-- [ ] Implement Smart FX GPT prompt logic (AIVA-9)  
-- [ ] Simulate FX trends with AI recommendations  
-- [ ] Start building frontend using Vite + React  
-- [ ] Connect mock or real FX data for analysis  
-- [ ] Begin documentation for AI reasoning patterns  
+- [ ] Simulate trend-based FX conversions
+- [ ] Start KYC/AML UX design
+- [ ] Add AI prompt logs to GitHub
+- [ ] Explore API integration (mock or real)
+- [ ] Research AU + EU financial regulations
+- [ ] Setup `/compliance` folder
 
 ---
 
-## 👤 About the Builder
+## 👤 Built By
 
 **Chirantan (Chris) Gogoi**  
-📍 Based in Australia  
-💼 Credit, finance & product experience  
-💡 Exploring AI, money, wallets, and DeFi  
-🧭 Solo founder building Aiva to learn & experiment in public  
+📍 Australia  
+🛠️ Finance, AI, and product builder in training  
+🔭 Exploring what the future of money *feels* like to use
 
 ---
 
-## 📌 Disclaimer
+## 📌 Note
 
-This is a learning-first, prototype project. Not yet production-ready. Built solo to understand modern fintech infrastructure and digital wallet innovation.
-
+This is an active solo founder prototype. Everything you're seeing is part of a real-world learning experience — design, logic, compliance, mistakes, and curiosity.  
+Not production ready. Yet.
