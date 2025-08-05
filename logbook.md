@@ -68,3 +68,26 @@
 ### ⏭️ Next steps
 - Continue with Smart FX AI prompt development (AIVA-9)
 - Sketch wireframe of Smart FX suggestion UI
+
+- ### 📅 5 August 2025
+
+**Task Completed:** AIVA-10 – Create Lovable UI element for AI suggestion
+
+**Description:**  
+Designed and implemented the UI component to display Smart FX recommendations in the wallet interface. This component presents the AI-suggested currency conversion action (e.g., "Convert AUD to USD") with supporting context and a "Convert Now" button.
+
+**What was done:**  
+- Designed a clean UI block for displaying real-time Smart FX suggestions
+- Added `Smart Fx.png` screenshot to `lovable_ui` folder in GitHub
+- Committed the changes with a proper message on the main branch
+- Maintained folder naming consistency and organisation across GitHub repo
+
+**Skills Practised:**  
+- UI thinking and layout composition  
+- GitHub commit & folder structuring  
+- React UI simulation using Lovable  
+- Documentation discipline with README and logbook
+
+**Next Up:**  
+Work on AIVA-11 – Testing FX trend data with GPT response
+
