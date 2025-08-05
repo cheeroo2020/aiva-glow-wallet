@@ -69,25 +69,44 @@
 - Continue with Smart FX AI prompt development (AIVA-9)
 - Sketch wireframe of Smart FX suggestion UI
 
-## 📅 5 August 2025
+## 📅 5 August 2025 — Compliance Epic Added
 
-**Task Completed:** AIVA-10 – Create Lovable UI element for AI suggestion
+**Overview:**  
+Today marks the official inclusion of a new core module — **Compliance & Risk Management** — into the Aiva Glow Wallet project. This decision strengthens the product’s alignment with regulatory, ethical, and user protection standards necessary for fintech products operating in global environments.
 
-**Description:**  
-Designed and implemented the UI component to display Smart FX recommendations in the wallet interface. This component presents the AI-suggested currency conversion action (e.g., "Convert AUD to USD") with supporting context and a "Convert Now" button.
+---
 
-**What was done:**  
-- Designed a clean UI block for displaying real-time Smart FX suggestions
-- Added `Smart Fx.png` screenshot to `lovable_ui` folder in GitHub
-- Committed the changes with a proper message on the main branch
-- Maintained folder naming consistency and organisation across GitHub repo
+### ✅ Key Activities
 
-**Skills Practised:**  
-- UI thinking and layout composition  
-- GitHub commit & folder structuring  
-- React UI simulation using Lovable  
-- Documentation discipline with README and logbook
+- 🧱 **Created new Epic:** `COMPLIANCE & RISK MANAGEMENT`
+- 🗂 **Added Jira tasks under new epic:**
+  - **AIVA-46**: Design KYC/AML onboarding flow
+  - **AIVA-47**: Draft compliance checklist for FX transactions
+  - **AIVA-48**: Define how to log sensitive actions (audit trail)
+  - **AIVA-49**: Map data handling policy to Australian Privacy Principles (APPs)
+  - **AIVA-50**: Create UI mockup for compliance alerts (e.g., conversion blocked)
+  - **AIVA-51**: Define AI ethics safeguards for Smart FX suggestions
+- 📝 Planned implementation of backend + UI elements for compliance
+- 🔍 Reviewed Jira and ensured all prior tasks are mapped correctly
 
-**Next Up:**  
-Work on AIVA-11 – Testing FX trend data with GPT response
+---
+
+### 🚧 Status Summary
+
+| Task ID  | Title                                                 | Epic                         | Status  |
+|----------|-------------------------------------------------------|------------------------------|---------|
+| AIVA-46  | Design KYC/AML onboarding flow                        | Compliance & Risk Management | ⏳ To Do |
+| AIVA-47  | Draft compliance checklist for FX transactions        | Compliance & Risk Management | ⏳ To Do |
+| AIVA-48  | Define how to log sensitive actions (audit trail)     | Compliance & Risk Management | ⏳ To Do |
+| AIVA-49  | Map data handling to Australian Privacy Principles    | Compliance & Risk Management | ⏳ To Do |
+| AIVA-50  | Create UI mockup for compliance alerts                | Compliance & Risk Management | ⏳ To Do |
+| AIVA-51  | Define AI ethics safeguards for Smart FX suggestions  | Compliance & Risk Management | ⏳ To Do |
+
+---
+
+### 🧠 Notes
+- These tasks are foundational for the legal, ethical, and privacy-aware design of Aiva.
+- Implementation begins after current Sprint 1 UI and AI modules reach 100% completion.
+- This shift also supports future discussions with investors, regulators, or incubators.
+
 
