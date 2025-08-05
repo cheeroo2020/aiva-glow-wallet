@@ -69,7 +69,7 @@
 - Continue with Smart FX AI prompt development (AIVA-9)
 - Sketch wireframe of Smart FX suggestion UI
 
-- ### 📅 5 August 2025
+## 📅 5 August 2025
 
 **Task Completed:** AIVA-10 – Create Lovable UI element for AI suggestion
 
