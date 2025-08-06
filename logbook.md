@@ -109,4 +109,23 @@ Today marks the official inclusion of a new core module — **Compliance & Risk 
 - Implementation begins after current Sprint 1 UI and AI modules reach 100% completion.
 - This shift also supports future discussions with investors, regulators, or incubators.
 
+## 📅 6 August 2025 – Compliance Foundation
+
+### ✅ Task Completed
+- **AIVA-46:** Drafted KYC/AML Onboarding Flow
+
+### 🛠 Work Summary
+- Designed a user journey to collect personal data and verify identity:
+  - Collected: Name, DOB, address
+  - Uploaded: ID documents (passport, driver’s license)
+  - Status: Verified / Pending / Retry
+
+### 📂 Output
+- Created `compliance_flows.md` file documenting the onboarding logic
+- Committed to GitHub with message: `Added draft KYC/AML onboarding flow (AIVA-46)`
+
+### 📌 Notes
+- Flow designed to support integration with providers (e.g., SumSub, Veriff)
+- Lays the foundation for UI mockups and backend validation rules
+
 
