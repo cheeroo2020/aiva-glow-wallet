@@ -124,8 +124,79 @@ Today marks the official inclusion of a new core module — **Compliance & Risk 
 - Created `compliance_flows.md` file documenting the onboarding logic
 - Committed to GitHub with message: `Added draft KYC/AML onboarding flow (AIVA-46)`
 
-### 📌 Notes
-- Flow designed to support integration with providers (e.g., SumSub, Veriff)
-- Lays the foundation for UI mockups and backend validation rules
+---
+
+---
+
+---
+
+### 📅 7 August 2025
+
+**Task ID:** AIVA-11  
+**Title:** Test FX trend data with GPT response  
+**Epic:** Smart FX AI Engine  
+**Status:** ✅ Completed  
+
+---
+
+#### 🧠 Objective  
+Implement a Python script that reads mock FX rate data, detects 7-day trends, and outputs Smart FX-style conversion recommendations for selected currency pairs.
+
+---
+
+#### ✅ Steps Completed
+
+1. Opened AIVA-11 task to analyse FX trend using GPT-style logic.
+2. Created directory structure:  
+   - `fx_data/` for storing JSON rate files  
+   - `ai/` for placing Python analysis scripts  
+3. Created `fxrates.json` using 7-day sample data manually inside `fx_data/`.
+4. Wrote `fx_trend_analysis.py` in `ai/` to:
+   - Read `fxrates.json`
+   - Extract currency pair values
+   - Analyse whether the trend was rising, falling, or stable
+   - Generate natural language suggestions
+5. Ran into the following **issues** and fixed them step-by-step:
+
+---
+
+#### 🛠️ Troubleshooting and Fixes
+
+| Issue | Root Cause | Fix |
+|------|------------|-----|
+| `cd path/to/your/aiva-glow-wallet` fails | Placeholder path not replaced | Used actual local repo path (`~/Desktop/aiva-glow-wallet`) |
+| `FileNotFoundError` on `fxrates.json` | File didn’t exist yet | Created file using `touch fx_data/fxrates.json` |
+| `fxrates.json` not found again | Wrong relative path | Ensured it was located inside `fx_data/` and referenced correctly from `ai/` |
+| KeyError: `'USD_AUD'` | Tried to access pair as top-level key | Realised JSON had dates as top-level keys, each containing pairs |
+| IndentationError after `for` loop | Block not indented | Properly indented the loop block |
+| Confusion on logic order | Was unclear how each part connects | Broke into smaller debug/test steps |
+| Added `"AUD_USD"` to pair list | This key doesn’t exist in JSON | Handled missing data gracefully with fallback logic |
+
+---
+
+#### 📸 Output Screenshot  
+> 📂 **Stored in:** `screenshots/`  
+![FX Suggestion Output](../screenshots/Screenshot%202025-08-07%20at%2010.38.47%E2%80%AFpm.png)
+
+> **Smart FX Suggestions (Auto-generated)**  
+> ```
+> [Smart FX Suggestion] Based on the past 7 days:
+> - USD_AUD: falling trend → Consider converting out of AUD  
+> - EUR_AUD: falling trend → Consider converting out of AUD  
+> - AUD_USD: N/A (Data missing) trend → Hold position in USD  
+> ```
+
+---
+
+#### 🔁 Next Steps
+
+- ✅ Create a `screenshots/` folder inside your GitHub repo root to store all future screenshot evidence.
+- ✅ Move current screenshot file into that folder.
+- ✅ Commit today’s files with message:  
+  `"AIVA-11: FX trend analysis script added with sample data, GPT-style recommendations & screenshots"`
+- ⏭ Start **AIVA-14**: Add trend logic to determine convert/wait strategy based on threshold settings.
+
+---
 
 
+---
