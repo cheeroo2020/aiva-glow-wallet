@@ -187,7 +187,28 @@ Implement a Python script that reads mock FX rate data, detects 7-day trends, an
 > ```
 
 ---
+### 💻 Post-Trend Output Git & File Handling (Second Half of Day)
 
+| Problem                              | Cause                                        | Resolution                                 |
+|-------------------------------------|----------------------------------------------|--------------------------------------------|
+| Screenshot file not committing      | File didn’t exist or wrong filename          | Confirmed correct name `screenshot 1.png`, moved to correct folder |
+| `mv` command failed (Permission Denied) | Trying to move from restricted folder       | Used `Downloads` as source for `mv` command |
+| `mv` filename with spaces broke CLI | Shell doesn’t handle unescaped spaces        | Renamed file to `screenshot 1.png`         |
+| `git add` failed to match file      | Incorrect file path                          | Fixed by using exact relative path         |
+| `git push` rejected with 403        | HTTPS push via password is deprecated        | Switched to GitHub Desktop (Option 3)      |
+| GitHub Desktop repo not showing     | Repo not synced or detected                  | Cloned again into GitHub Desktop app       |
+
+---
+
+### ✍️ Git Commit History
+
+```bash
+git add screenshots/fx_suggestion_output.png
+git commit -m "AIVA-11: Add output screenshot for Smart FX suggestion"
+git push origin main
+✅ Final push done using GitHub Desktop after switching from CLI. All files pushed successfully.
+
+---
 #### 🔁 Next Steps
 
 - ✅ Create a `screenshots/` folder inside your GitHub repo root to store all future screenshot evidence.
