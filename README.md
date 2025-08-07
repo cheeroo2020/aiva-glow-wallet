@@ -1,124 +1,119 @@
 # 🌐 Aiva Glow Wallet
 
-**A next-gen multi-currency wallet** with AI-powered FX suggestions, live trend data, and privacy-first compliance architecture — designed and built solo to explore the future of money, decentralised finance, and intelligent wallets.
+**A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
 
 ---
 
 ## 🚀 Project Vision
 
-Aiva Glow Wallet is both a product prototype and learning journey to explore:
+Aiva is a build + learn journey to explore how the future of finance is being shaped by:
 
-- 💱 Smart FX recommendation systems  
-- 📊 Real-time currency trend analysis  
-- 🤖 GPT-powered AI interaction logic  
-- 🌏 Multi-currency balances and interoperability  
-- 🛡️ KYC/AML flow, data privacy, and AI ethics  
-- 🔗 DeFi readiness with API & blockchain components  
-
----
-
-## 📁 Folder Structure
-
-aiva-glow-wallet/
-│
-├── lovable_ui/ # UI mockups for wallet dashboard, balances, converter
-├── ai/ # GPT prompt logic and AI FX suggestion engine
-├── fx_data/ # Sample exchange rate JSON and trend logic
-├── compliance/ # KYC, AML, data policies, AI safeguards
-├── docs/ # Main documentation (README, logbook, etc.)
-└── pitch_deck/ # Timeline, vision notes, pitch outline
-
+- Smart FX engines
+- Real-time trend data
+- AI UX logic
+- Multicurrency interoperability
+- Blockchain + DeFi infrastructure
+- Compliance & risk intelligence
 
 ---
 
-## 🧱 Project Modules
+## 🧱 Folder Structure
 
-### 1. Wallet UI (`/lovable_ui`)
-- ✅ FX Wallet Dashboard (AIVA-4)
-- ✅ 3-Currency Balance Blocks – USD, EUR, AUD (AIVA-5)
-- ✅ FX Converter UI Input & Output (AIVA-6)
-- ✅ Static Transaction Log Display (AIVA-7)
+├── ai/ # Smart FX engine scripts
+│ └── fx_trend_analysis.py
+├── fx_data/ # Mock FX rate data (7-day JSON)
+│ └── fxrates.json
+├── lovable-ui/ # UI exported from Lovable
+│ └── ...
+├── designs/ # UI screen concepts (structure only)
+│ └── ...
+├── screenshots/ # Output snapshots for tracking
+│ └── fx_suggestion_output.png
+├── logbook.md # Daily build journal
+├── README.md # Project overview (you’re here!)
 
-> **Status:** ✅ Completed (Sprint 1)
+
+---
+
+## 🧑‍💻 Sprint 1 Summary (1 Aug – 15 Aug)
+
+| Task ID  | Title                                               | Status      |
+|----------|-----------------------------------------------------|-------------|
+| AIVA-4   | Design wallet dashboard in Lovable                  | ✅ Done     |
+| AIVA-5   | Add 3 currency balance blocks                       | ✅ Done     |
+| AIVA-6   | Create FX converter UI                              | ✅ Done     |
+| AIVA-7   | Display static transaction log                      | ✅ Done     |
+| AIVA-9   | Draft Smart FX GPT prompt logic                     | 🔄 In Progress |
+| AIVA-10  | Create Lovable UI element for AI suggestion         | 🔄 In Progress |
+| AIVA-11  | Test FX trend data with GPT-style response          | ✅ Done     |
+
+---
+
+## 🧠 Module Progress
+
+### 1. Wallet UI (`/lovable-ui`)
+Interactive mockups built in [Lovable.dev](https://lovable.dev), then exported to GitHub.
+
+- ✅ FX Wallet Dashboard  
+- ✅ 3-Currency Balance Blocks (USD, EUR, AUD)  
+- ✅ FX Converter UI  
+- ✅ Static Transaction Log Display  
+
+> **Status:** Complete ✅
 
 ---
 
 ### 2. Smart FX AI Engine (`/ai`)
-- ✅ Draft Smart FX GPT Prompt Logic (AIVA-9)
-- ✅ UI Element for FX Suggestions (AIVA-10)
-- ⏳ Test FX Trend Data with GPT Response (AIVA-11)
 
-> **Status:** ⚙️ In Progress
+- ✅ `fx_trend_analysis.py`: Reads 7-day JSON data and outputs FX conversion suggestions.  
+- ✅ Suggestions generated using basic trend detection logic.  
+- 🔄 Upcoming: Enhance logic with thresholds (e.g., "Wait" vs "Convert Now").
 
----
-
-### 3. FX Data & API Layer (`/fx_data`)
-- ⏳ Create `fxrates.json` with 7-day sample data (AIVA-13)
-- ⏳ Add trend logic to determine convert/wait (AIVA-14)
-- ⏳ Simulate FX conversion using mock data (AIVA-15)
-
-> **Status:** 🔜 To Do
+> **Status:** In Progress
 
 ---
 
-### 4. Compliance & Risk Management (`/compliance`)
-- ✅ Design KYC/AML onboarding flow (AIVA-46)
-- ✅ Draft FX transaction compliance checklist (AIVA-47)
-- ✅ Define logging of sensitive actions (AIVA-48)
-- ✅ Map to Australian Privacy Principles (AIVA-49)
-- ⏳ Create compliance alert UI (AIVA-50)
-- ✅ Define AI ethics safeguards (AIVA-51)
+### 3. FX Data Store (`/fx_data`)
 
-> **Status:** 🛡️ Active Development (Added 6 Aug)
+- ✅ `fxrates.json`: Mock historical FX data over 7 days.  
+- Used to simulate real-world market scenarios for AI suggestion testing.
 
 ---
 
-### 5. Documentation & GitHub (`/docs`)
-- ✅ Create GitHub Repo (AIVA-17)
-- ✅ Write `README.md` with vision and stack (AIVA-18)
-- ⏳ Add `mockdata/` and `ai/` folders to GitHub (AIVA-19)
+### 4. Screenshots & Logs (`/screenshots`, `/logbook.md`)
 
-> **Status:** 🔄 Ongoing
+- ✅ Screenshots stored in `screenshots/` for traceability.  
+- ✅ Daily progress logged in `logbook.md`.
 
 ---
 
-### 6. Demo & Launch (`/pitch_deck`)
-- ⏳ Set key milestone dates (AIVA-21)
-- ⏳ Plan pitch deck content in Notion or Canva (AIVA-22)
+### 5. Compliance & Risk Engine (New Epic)
 
-> **Status:** 📊 Planned
+> **Added on 5 August 2025**
 
----
-
-## 📆 Sprint 1 Overview (1 Aug – 15 Aug)
-
-| ID       | Task                                                  | Status   | Epic                        |
-|----------|--------------------------------------------------------|----------|-----------------------------|
-| AIVA-4   | Design wallet dashboard in Lovable                    | ✅ Done  | Wallet UI                  |
-| AIVA-5   | Add 3 currency balance blocks                         | ✅ Done  | Wallet UI                  |
-| AIVA-6   | Create FX converter UI                                | ✅ Done  | Wallet UI                  |
-| AIVA-7   | Display static transaction log                        | ✅ Done  | Wallet UI                  |
-| AIVA-9   | Draft Smart FX GPT prompt logic                       | ✅ Done  | Smart FX AI Engine         |
-| AIVA-10  | Create Lovable UI element for AI suggestion           | ✅ Done  | Smart FX AI Engine         |
-| AIVA-11  | Test FX trend data with GPT response                  | ⏳ To Do | Smart FX AI Engine         |
+- 📌 Jira Epic created to cover regulatory logic, AML checks, ethical AI behaviour, and privacy-friendly UX.
+- Integration plan underway across `/ai`, `/wallet`, and `/backend` modules.
 
 ---
 
 ## 🛠 Tech Stack
 
-- 🎨 [Lovable.dev](https://lovable.dev) – UI prototyping  
-- 🤖 GPT prompt logic – AI FX engine  
-- 📦 JSON – FX rate storage & mock data  
-- ✅ Jira – Agile board for epics/tasks  
-- 🗃 GitHub – Version control, documentation  
+- 🎨 [Lovable.dev](https://lovable.dev) – UI design
+- 🧠 GPT prompt logic – Smart FX suggestions (manual for now)
+- 🐍 Python – Backend data handling & trend simulation
+- 🗂 GitHub – Version control & commits
+- 📋 Jira – Task and sprint tracking
+- 📁 VS Code – Local development
+- 🔄 GitHub Desktop – Commit/push automation
 
 ---
 
-## 📌 Project Notes
+## 🧭 What’s Next
 
-- This is an **MVP prototype** built in public by a solo founder.  
-- Each module is **learning-driven**: UX, API, AI logic, and compliance.  
-- Compliance was added as a **dedicated Epic** on 6 Aug 2025 to align with real-world expectations for cross-border wallets.  
+- [ ] AIVA-14: Add threshold logic for “Convert Now” vs “Wait”
+- [ ] Start integrating basic FX API (mock or open-source)
+- [ ] Move toward frontend interactivity (React or Vite-based)
+- [ ] Start Compliance epic with dummy KYC rules and logic
 
 ---
 
@@ -126,5 +121,11 @@ aiva-glow-wallet/
 
 **Chirantan (Chris) Gogoi**  
 📍 Based in Australia  
-🔭 Building, learning, and documenting the future of finance — one module at a time  
-💬 Reach out via [GitHub](https://github.com/cheeroo2020) or LinkedIn to collaborate!
+🔭 Exploring the future of money, wallets, AI, and cross-border finance  
+💼 Solo founder in learning & prototyping phase
+
+---
+
+## 📌 Note
+
+This project is a **solo founder prototype** in active build mode — equal parts experimentation, learning, and inspiration.
