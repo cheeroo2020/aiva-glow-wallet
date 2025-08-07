@@ -1,7 +1,7 @@
 import json
 
 # Load data from fxrates.json
-with open('../fx_data/fxrates.json', 'r') as f:
+with open('fx_data/fxrates.json', 'r') as f:
     data = json.load(f)
 
 trend_summary = {}
@@ -16,7 +16,13 @@ def detect_trend(rates):
 
 # Analyze each currency pair
 for pair in ['USD_AUD', 'EUR_AUD', 'AUD_USD']:
-    trend = detect_trend(data[pair])
+    # Collect that pair's values from each date
+    try:
+        pair_values = [entry[pair] for entry in data.values()]
+        trend = detect_trend(pair_values)
+    except KeyError:
+        trend = "N/A (Data missing)"
+    
     trend_summary[pair] = trend
 
 # Prepare recommendation string
