@@ -1,6 +1,6 @@
 # 🌐 Aiva Glow Wallet
 
-**A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
+**A next-gen multi-currency wallet** with AI-powered Smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
 
 ---
 
@@ -35,6 +35,9 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ---
 
+
+---
+
 ## 🧑‍💻 Sprint 1 Summary (1 Aug – 15 Aug)
 
 | Task ID  | Title                                               | Status      |
@@ -43,9 +46,12 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 | AIVA-5   | Add 3 currency balance blocks                       | ✅ Done     |
 | AIVA-6   | Create FX converter UI                              | ✅ Done     |
 | AIVA-7   | Display static transaction log                      | ✅ Done     |
-| AIVA-9   | Draft Smart FX GPT prompt logic                     | 🔄 In Progress |
-| AIVA-10  | Create Lovable UI element for AI suggestion         | 🔄 In Progress |
+| AIVA-9   | Draft Smart FX GPT prompt logic                     | ✅ Done     |
+| AIVA-10  | Create Lovable UI element for AI suggestion         | ✅ Done     |
 | AIVA-11  | Test FX trend data with GPT-style response          | ✅ Done     |
+| AIVA-13  | Create fxrates.json with 7-day sample data           | ✅ Done     |
+| AIVA-14  | Add trend logic to determine convert/wait           | 🔄 In Progress |
+| AIVA-15  | Simulate FX conversion using mock data              | 🔄 In Progress |
 
 ---
 
@@ -108,12 +114,17 @@ Interactive mockups built in [Lovable.dev](https://lovable.dev), then exported t
 
 ---
 
-## 🧭 What’s Next
+## 🧭 What’s Next (Sprint 2 Preview – 15 Aug to 29 Aug)
 
-- [ ] AIVA-14: Add threshold logic for “Convert Now” vs “Wait”
-- [ ] Start integrating basic FX API (mock or open-source)
-- [ ] Move toward frontend interactivity (React or Vite-based)
-- [ ] Start Compliance epic with dummy KYC rules and logic
+Sprint 2 will shift focus from core FX trend analysis to **infrastructure, documentation, and compliance integration**.
+
+Planned items include:
+- 📌 **AIVA-17**: Create GitHub repo structure refinements  
+- 📌 **AIVA-18**: Write detailed README.md with vision & tech stack  
+- 📌 **AIVA-19**: Add mockdata and AI folders in GitHub  
+- 📌 **AIVA-21**: Set key milestone dates for build phases  
+- 📌 **AIVA-22**: Plan pitch deck content in Notion or Canva  
+- 📌 **AIVA-46 – 51**: Implement compliance flows (KYC/AML onboarding, audit logging, ethical AI safeguards, data handling policy, compliance alerts)
 
 ---
 
@@ -129,3 +140,4 @@ Interactive mockups built in [Lovable.dev](https://lovable.dev), then exported t
 ## 📌 Note
 
 This project is a **solo founder prototype** in active build mode — equal parts experimentation, learning, and inspiration.
+
