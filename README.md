@@ -1,4 +1,4 @@
-# 🌐 Aiva Glow Wallet
+fffffFCVP[;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;BV                        BBB7[]'''''P;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;# 🌐 Aiva Glow Wallet
 
 **A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
 
