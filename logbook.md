@@ -218,6 +218,80 @@ git push origin main
 - ⏭ Start **AIVA-14**: Add trend logic to determine convert/wait strategy based on threshold settings.
 
 ---
+## 9 August 2025  
+**Task ID:** AIVA-14  
+**Title:** Add trend logic to determine convert/wait  
+**Epic:** FX Data & API Layer  
+**Status:** ✅ Completed  
+
+---
+
+### 🧠 Objective  
+Add percentage-based threshold logic to the FX trend analysis so the AI can recommend either "Convert Now" or "Wait" depending on market movement size.
+
+---
+
+### 🗂 Step-by-Step Process  
+
+1. **Reviewed yesterday’s progress** from AIVA-13 & AIVA-11 to ensure base FX analysis logic was ready.  
+2. **Created `fx_trend_with_threshold.py`** in `/ai/`.  
+3. **Set threshold logic**:  
+   - If drop ≥ threshold → **Convert Now**  
+   - If small movement → **Wait**  
+4. **Initial run failed**:  
+   - Reason: Python could not find script (`No such file or directory`)  
+   - Cause: Repo had been moved from `Desktop` to `Documents/GitHub/`  
+   - Fix: Navigated to correct path in terminal (`cd ~/Documents/GitHub/aiva-glow-wallet`)  
+5. **File not found error for script**:  
+   - Cause: File still in old Desktop folder  
+   - Fix: Moved file into `/ai/` inside repo  
+6. **Tested script with mock data** in `/fx_data/fxrates.json`.  
+7. **Observed missing AUD_USD data**:  
+   - Added graceful handling with `"N/A"` output to avoid crash.  
+
+---
+
+### 🛠️ Troubleshooting Table  
+
+| Issue | Root Cause | Fix |
+|-------|------------|-----|
+| Script not found | Running in wrong directory | Navigated to repo folder in Documents |
+| Python path error | File created outside repo | Moved script into correct `/ai/` directory |
+| Missing AUD_USD key | Not present in fxrates.json | Added "N/A" handling logic |
+
+---
+
+### 📸 Output Screenshot  
+Stored as `/screenshots/screenshot_aiva14_threshold_output.png`:
+
+USD_AUD: falling (-1.32%) → Convert Now | USD weakening vs AUD | Consider holding AUD
+
+EUR_AUD: falling (-3.01%) → Convert Now | EUR weakening vs AUD | Consider holding AUD
+
+AUD_USD: N/A (data missing) → Hold position
+
 
 
 ---
+
+### 🔁 Next Steps  
+- Integrate threshold logic into Smart FX UI  
+- Begin AIVA-15 to simulate FX conversions with mock balances  
+
+---
+
+### 📌 Commit Info  
+
+**Commit Message:**  
+`AIVA-14: Added FX threshold logic for convert/wait decisions`  
+ 
+**Commit Description:**  
+Implemented fx_trend_with_threshold.py in /ai/
+
+Added % change calculation and threshold-based decision logic
+
+Handles missing pairs gracefully with N/A output
+
+Moved repo to Documents/GitHub/ for consistent pathing
+
+Added output screenshot to /screenshots/
