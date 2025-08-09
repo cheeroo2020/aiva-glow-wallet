@@ -215,7 +215,9 @@ git push origin main
 - ⏭ Start **AIVA-14**: Add trend logic to determine convert/wait strategy based on threshold settings.
 
 ---
----
+
+
+
 ## 9 August 2025  
 **Task ID:** AIVA-14  
 **Title:** Add trend logic to determine convert/wait  
