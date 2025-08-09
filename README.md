@@ -99,14 +99,4 @@ Added 5 Aug — will begin after Sprint 1 UI & AI tasks.
 
 ---
 
-## 📌 Commit Info (9 Aug)
 
-**Commit Message:**  
-`AIVA-14: Added FX threshold logic for convert/wait decisions`  
-
-**Commit Description:**  
-- Implemented `fx_trend_with_threshold.py` in `/ai/`  
-- Added % change calculation & threshold-based recommendations  
-- Handled missing pairs gracefully with N/A output  
-- Moved repo to `Documents/GitHub/` for consistent pathing  
-- Added output screenshot to `/screenshots/`  
