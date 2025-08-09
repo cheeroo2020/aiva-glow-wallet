@@ -1,6 +1,6 @@
 # 🌐 Aiva Glow Wallet
 
-**A next-gen multi-currency wallet** with AI-powered Smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
+**A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
 
 ---
 
@@ -19,22 +19,20 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ## 🧱 Folder Structure
 
-├── ai/ # Smart FX engine scripts
-│ └── fx_trend_analysis.py
-├── fx_data/ # Mock FX rate data (7-day JSON)
-│ └── fxrates.json
-├── lovable-ui/ # UI exported from Lovable
-│ └── ...
-├── designs/ # UI screen concepts (structure only)
-│ └── ...
-├── screenshots/ # Output snapshots for tracking
-│ └── fx_suggestion_output.png
-├── logbook.md # Daily build journal
+├── ai/ # Smart FX engine scripts  
+│   ├── fx_trend_analysis.py  
+│   └── fx_trend_with_threshold.py  
+├── fx_data/ # Mock FX rate data (7-day JSON)  
+│   └── fxrates.json  
+├── lovable-ui/ # UI exported from Lovable  
+│   └── ...  
+├── designs/ # UI screen concepts (structure only)  
+│   └── ...  
+├── screenshots/ # Output snapshots for tracking  
+│   └── fx_suggestion_output.png  
+│   └── screenshot_aiva14_threshold_output.png  
+├── logbook.md # Daily build journal  
 ├── README.md # Project overview (you’re here!)
-
-
----
-
 
 ---
 
@@ -50,8 +48,8 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 | AIVA-10  | Create Lovable UI element for AI suggestion         | ✅ Done     |
 | AIVA-11  | Test FX trend data with GPT-style response          | ✅ Done     |
 | AIVA-13  | Create fxrates.json with 7-day sample data           | ✅ Done     |
-| AIVA-14  | Add trend logic to determine convert/wait           | 🔄 In Progress |
-| AIVA-15  | Simulate FX conversion using mock data              | 🔄 In Progress |
+| AIVA-14  | Add trend logic to determine convert/wait           | ✅ Done     |
+| AIVA-15  | Simulate FX conversion using mock data              | 🔄 To Do    |
 
 ---
 
@@ -71,11 +69,11 @@ Interactive mockups built in [Lovable.dev](https://lovable.dev), then exported t
 
 ### 2. Smart FX AI Engine (`/ai`)
 
-- ✅ `fx_trend_analysis.py`: Reads 7-day JSON data and outputs FX conversion suggestions.  
-- ✅ Suggestions generated using basic trend detection logic.  
-- 🔄 Upcoming: Enhance logic with thresholds (e.g., "Wait" vs "Convert Now").
+- ✅ `fx_trend_analysis.py`: Reads 7-day JSON data and outputs FX conversion suggestions based on trend direction.  
+- ✅ `fx_trend_with_threshold.py`: Enhanced with % change threshold to recommend **Convert Now** or **Wait**.  
+- ✅ Handles missing data gracefully with “N/A” output.  
 
-> **Status:** In Progress
+> **Status:** In Progress — next step is simulating actual FX conversions (AIVA-15).
 
 ---
 
@@ -114,17 +112,11 @@ Interactive mockups built in [Lovable.dev](https://lovable.dev), then exported t
 
 ---
 
-## 🧭 What’s Next (Sprint 2 Preview – 15 Aug to 29 Aug)
+## 🧭 What’s Next
 
-Sprint 2 will shift focus from core FX trend analysis to **infrastructure, documentation, and compliance integration**.
-
-Planned items include:
-- 📌 **AIVA-17**: Create GitHub repo structure refinements  
-- 📌 **AIVA-18**: Write detailed README.md with vision & tech stack  
-- 📌 **AIVA-19**: Add mockdata and AI folders in GitHub  
-- 📌 **AIVA-21**: Set key milestone dates for build phases  
-- 📌 **AIVA-22**: Plan pitch deck content in Notion or Canva  
-- 📌 **AIVA-46 – 51**: Implement compliance flows (KYC/AML onboarding, audit logging, ethical AI safeguards, data handling policy, compliance alerts)
+- [ ] AIVA-15: Simulate FX conversions using mock data
+- [ ] Integrate AI suggestions with frontend UI
+- [ ] Start Compliance epic with dummy KYC rules and logic
 
 ---
 
@@ -140,4 +132,3 @@ Planned items include:
 ## 📌 Note
 
 This project is a **solo founder prototype** in active build mode — equal parts experimentation, learning, and inspiration.
-
