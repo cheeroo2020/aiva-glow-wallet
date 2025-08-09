@@ -124,9 +124,6 @@ Today marks the official inclusion of a new core module — **Compliance & Risk 
 - Created `compliance_flows.md` file documenting the onboarding logic
 - Committed to GitHub with message: `Added draft KYC/AML onboarding flow (AIVA-46)`
 
----
-
----
 
 ---
 
@@ -217,6 +214,7 @@ git push origin main
   `"AIVA-11: FX trend analysis script added with sample data, GPT-style recommendations & screenshots"`
 - ⏭ Start **AIVA-14**: Add trend logic to determine convert/wait strategy based on threshold settings.
 
+---
 ---
 ## 9 August 2025  
 **Task ID:** AIVA-14  
