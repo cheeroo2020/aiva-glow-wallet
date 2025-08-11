@@ -1,9 +1,11 @@
+import sys
 import json
 from collections import OrderedDict
 
 DATA_PATH = "fx_data/fxrates.json"
 PAIRS_TO_CHECK = ["USD_AUD", "EUR_AUD", "AUD_USD"]  # safe to include missing; we'll handle it
-THRESHOLD_PCT = 1.0  # % movement over period to say "Convert Now" (tweak to taste)
+THRESHOLD_PCT = float(sys.argv[1]) if len(sys.argv) > 1 else 1.0
+
 
 def load_data(path):
     with open(path, "r") as f:
@@ -58,6 +60,12 @@ def action_from_move(pct, quote_ccy, base_ccy):
 
     return urgency, direction_note, user_tip
 
+def demo_pct(vals):
+    first, last = vals[0], vals[-1]
+    pct = ((last - first) / first) * 100
+    print(f"demo {vals} → {pct:.2f}%")
+
+
 def main():
     data = load_data(DATA_PATH)
 
@@ -75,6 +83,10 @@ def main():
         else:
             missing = True
             break
+
+    demo_pct([1.00, 1.02])  # predict +2.00%
+    demo_pct([1.00, 0.99])  # predict -1.00%
+
 
     print("USD_AUD series:", manual_series, "| missing_any_day:", missing)
 
@@ -105,6 +117,7 @@ def main():
         )
 
     print("\n".join(report_lines))
+    print(f"DEBUG {pair}: first={first}, last={last}, change={change:.2f}% | threshold={THRESHOLD_PCT}%")
 
 if __name__ == "__main__":
     main()
