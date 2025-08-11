@@ -61,6 +61,25 @@ def action_from_move(pct, quote_ccy, base_ccy):
 def main():
     data = load_data(DATA_PATH)
 
+    print("TYPE:", type(data))
+    print("DATES:", list(data.keys()))
+    first_date = next(iter(data.keys()))
+    print("SAMPLE DAY:", first_date, "→", data[first_date])
+
+    pair = "USD_AUD"
+    manual_series = []
+    missing = False
+    for day in data.values():
+        if pair in day:
+            manual_series.append(day[pair])
+        else:
+            missing = True
+            break
+
+    print("USD_AUD series:", manual_series, "| missing_any_day:", missing)
+
+
+
     report_lines = []
     report_lines.append("[Smart FX Suggestion] 7‑day summary with threshold logic")
     report_lines.append(f"Decision threshold: {THRESHOLD_PCT:.2f}% total move\n")
