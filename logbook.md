@@ -295,3 +295,85 @@ Handles missing pairs gracefully with N/A output
 Moved repo to Documents/GitHub/ for consistent pathing
 
 Added output screenshot to /screenshots/
+
+---
+
+## 📅 11 August 2025  
+**Task ID:** AIVA-14 (Enhancement)  
+**Title:** Enhance FX trend analysis with debug output & flexible threshold input  
+**Epic:** FX Data & API Layer  
+**Status:** ✅ Completed  
+
+---
+
+### 🧠 Objective  
+Improve the FX trend analysis script (`fx_trend_with_threshold.py`) to make it easier to debug, test, and adjust decision logic by adding detailed printouts and a variable threshold via CLI.
+
+---
+
+### 🗂 Step-by-Step Process  
+
+1. **Reviewed** previous implementation of `fx_trend_with_threshold.py` from 9 August.  
+2. **Added debug prints**:  
+   - Data type (`OrderedDict`)  
+   - List of available dates  
+   - Sample day values with currency pairs and rates  
+3. **Printed full currency series** for each pair with a flag indicating if any days are missing.  
+4. **Allowed CLI argument** to set decision threshold:  
+   - Example: `python3 ai/fx_trend_with_threshold.py 0.5` for 0.5% threshold  
+   - Defaults to 1.0% if not specified.  
+5. **Formatted outputs** to clearly show:  
+   - Currency pair  
+   - Trend direction & % change  
+   - Decision: "Convert Now", "Wait", or "Hold position"  
+6. **Tested script** with thresholds 0.5%, 1.0%, and 2.0% to confirm dynamic behaviour.  
+
+---
+
+### 🛠️ Troubleshooting Table  
+
+| Issue | Root Cause | Fix |
+|-------|------------|-----|
+| `zsh: number expected` error | CLI threshold argument incorrectly formatted | Ensured correct float input and tested valid syntax |
+| Output unclear for debugging | Script only showed final suggestions | Added print statements before decision logic |
+
+---
+
+### 📸 Output Screenshot  
+**Filename:** `fx_trend_debug_threshold_tests.png`  
+**Location:** `/screenshots/`  
+**Description:** Shows three runs of the script with thresholds of 1.0%, 0.5%, and 2.0%, including debug details.  
+
+---
+
+### 📌 Commit Info  
+
+**Commit #1 – Python Script Update**  
+- **Commit Message:** `AIVA-14: Enhance FX trend analysis with debug output & flexible threshold input`  
+- **Commit Description:**
+
+  - Added debug prints for data type, date range, and sample day values
+
+  - Displayed full currency series with missing data flag
+
+  - Enabled passing custom threshold percentage via CLI argument
+
+  - Improved output formatting for trend % change and decision
+
+
+**Commit #2 – Screenshot Evidence**  
+- **Commit Message:** `AIVA-14: Add debug threshold test screenshot`  
+- **Commit Description:**  
+
+- Added screenshot of FX trend analysis script runs with thresholds 0.5%, 1.0%, and 2.0%
+
+- Stored in /screenshots/fx_trend_debug_threshold_tests.png
+
+
+---
+
+### 🔁 Next Steps  
+- Integrate this enhanced debugging into a test suite for automated runs.  
+- Move towards AIVA-15: Simulate FX conversions using mock wallet balances.  
+
+
