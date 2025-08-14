@@ -1,6 +1,6 @@
 # 🌐 Aiva Glow Wallet
 
-**A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
+**A next-gen multi-currency wallet** with AI-powered smart FX recommendations, live trend analysis, environmental impact tracking, and DeFi-friendly architecture — designed and built by a solo founder to explore the future of money, cross-border finance, and digital wallets.
 
 ---
 
@@ -11,6 +11,7 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 - Smart FX engines
 - Real-time trend data
 - AI UX logic
+- Environmental impact tracking (**Green FX**)
 - Multicurrency interoperability
 - Blockchain + DeFi infrastructure
 - Compliance & risk intelligence
@@ -19,12 +20,18 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ## 🧱 Folder Structure
 
-├── ai/ # Smart FX engine scripts  
+├── ai/ # Smart FX engine & estimators  
 │   ├── fx_trend_analysis.py  
-│   └── fx_trend_with_threshold.py  
-├── fx_data/ # Mock FX rate data (7-day JSON)  
-│   └── fxrates.json  
-├── lovable-ui/ # UI exported from Lovable  
+│   ├── fx_trend_with_threshold.py  
+│   └── carbon_estimator.py  
+├── fx_data/ # Mock FX, transaction, and carbon data  
+│   ├── fxrates.json  
+│   ├── transactions_sample.json  
+│   └── carbon_factors.json  
+├── lovable_ui/ # UI exported from Lovable (Markdown + assets)  
+│   ├── ai_suggestion_component.md  
+│   ├── compliance_collapsible_panel.md  
+│   └── Smart Fx.png  
 ├── designs/ # UI concepts  
 ├── screenshots/ # Output snapshots for tracking  
 ├── logbook.md # Daily build journal  
@@ -34,41 +41,48 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ## 🧑‍💻 Sprint 1 Summary (1 Aug – 15 Aug)
 
-| Task ID  | Title                                               | Status      |
-|----------|-----------------------------------------------------|-------------|
-| AIVA-4   | Design wallet dashboard in Lovable                  | ✅ Done     |
-| AIVA-5   | Add 3 currency balance blocks                       | ✅ Done     |
-| AIVA-6   | Create FX converter UI                              | ✅ Done     |
-| AIVA-7   | Display static transaction log                      | ✅ Done     |
-| AIVA-9   | Draft Smart FX GPT prompt logic                     | 🔄 In Progress |
-| AIVA-10  | Create Lovable UI element for AI suggestion         | 🔄 In Progress |
-| AIVA-11  | Test FX trend data with GPT-style response          | ✅ Done     |
-| AIVA-14  | Add FX threshold logic for convert/wait             | ✅ Done     |
+| Task ID  | Title                                                              | Status      |
+|----------|--------------------------------------------------------------------|-------------|
+| AIVA-4   | Design wallet dashboard in Lovable                                 | ✅ Done     |
+| AIVA-5   | Add 3 currency balance blocks                                      | ✅ Done     |
+| AIVA-6   | Create FX converter UI                                             | ✅ Done     |
+| AIVA-7   | Display static transaction log                                     | ✅ Done     |
+| AIVA-9   | Draft Smart FX GPT prompt logic                                    | ✅ Done     |
+| AIVA-10  | Create Lovable UI element for AI suggestion                        | ✅ Done     |
+| AIVA-11  | Test FX trend data with GPT-style response                         | ✅ Done     |
+| AIVA-14  | Add FX threshold logic for convert/wait                            | ✅ Done     |
+| AIVA-52  | Add **Green FX carbon badge** to Smart FX UI                       | ✅ Done     |
+| AIVA-53  | Add **Compliance & Risk collapsible panel** to UI                  | ✅ Done     |
 
 ---
 
 ## 🧠 Module Progress
 
-### 1. Wallet UI (`/lovable-ui`)
+### 1. Wallet UI (`/lovable_ui`)
 ✅ FX Wallet Dashboard  
 ✅ 3-Currency Balance Blocks  
 ✅ FX Converter UI  
 ✅ Static Transaction Log Display  
+✅ Smart FX Recommendation Card with **Green FX Carbon Badge**  
+✅ **Compliance & Risk Collapsible Panel** (KYC snapshot, risk details, required actions)
 
 ---
 
 ### 2. Smart FX AI Engine (`/ai`)
 
 - `fx_trend_analysis.py` — detects rising/falling trends from mock data.  
-- `fx_trend_with_threshold.py` — **NEW**: adds % change calculation & threshold-based “Convert Now” / “Wait” decisions.  
+- `fx_trend_with_threshold.py` — adds % change calculation & threshold-based “Convert Now” / “Wait” decisions.  
+- **NEW:** `carbon_estimator.py` — estimates kg CO₂ per transaction using mock factors and assigns Low/Medium/High badge.  
 - Handles missing currency pairs gracefully.
 
-> **Status:** In Progress
+> **Status:** Integrated with UI mockups in Lovable.
 
 ---
 
 ### 3. FX Data Store (`/fx_data`)
-Mock JSON with 7-day history, used for AI logic testing.
+- `fxrates.json` — 7-day FX rates.  
+- `transactions_sample.json` — mock transaction history for testing.  
+- `carbon_factors.json` — mock carbon intensity per currency pair.
 
 ---
 
@@ -78,15 +92,17 @@ All outputs now tracked in `/screenshots` and `/logbook.md`.
 ---
 
 ### 5. Compliance & Risk Engine (Epic)
-Added 5 Aug — will begin after Sprint 1 UI & AI tasks.
+- Collapsible UI panel for compliance/risk checks in Lovable.
+- KYC/AML snapshot, transaction risk classification, required actions.
+- Placeholder for Australian Privacy Principles (APPs) compliance and AI ethics safeguards.
 
 ---
 
 ## 🧭 What’s Next
 - [ ] AIVA-15: Simulate FX conversions with mock balances  
-- [ ] Connect threshold logic to UI  
-- [ ] Start basic FX API integration (mock or open source)  
-- [ ] Begin compliance rule prototypes  
+- [ ] Connect carbon estimation to live transaction flow  
+- [ ] Add API-based FX rates and live carbon intensity data  
+- [ ] Link compliance rules to real-time mock transactions  
 
 ---
 
@@ -96,7 +112,3 @@ Added 5 Aug — will begin after Sprint 1 UI & AI tasks.
 📍 Based in Australia  
 🔭 Exploring the future of money, wallets, AI, and cross-border finance  
 💼 Solo founder in learning & prototyping phase  
-
----
-
-
