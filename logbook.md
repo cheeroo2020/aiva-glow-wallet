@@ -377,23 +377,103 @@ Improve the FX trend analysis script (`fx_trend_with_threshold.py`) to make it e
 - Move towards AIVA-15: Simulate FX conversions using mock wallet balances.  
 
 ---
+## 📅 14 August 2025
 
-## 14 August 2025
+**Task IDs:** AIVA-52, AIVA-53  
+**Titles:**  
+- AIVA-52: Add Green FX carbon badge to AI Suggestion UI  
+- AIVA-53: Add Compliance & Risk collapsible panel to UI  
+**Epic:** Compliance & Risk Management  
+**Status:** ✅ Completed (UI placeholders, backend logic later)  
 
-### Tasks Completed
-- **AIVA-52 & AIVA-53**: Added **Green FX carbon badge** and **Compliance & Risk collapsible panel** to Lovable UI.  
-- Updated `lovable_ui/ai_suggestion_component.md`:
-  - Integrated 🌱 **Green FX** badge showing carbon impact (e.g., 0.42 kg CO₂ Low).
-  - Added collapsible **Compliance & Risk** section (default state: Review).
-  - Included KYC/AML snapshot, transaction risk details, and required actions.
-  - Added info panel outlining APP compliance, AI ethics safeguards, and EDD trigger rules.
-- Linked new UI elements to **mock data outputs** from `/ai/carbon_estimator.py`.
+---
 
-### Notes
-- These changes are **UI placeholders** only; trend, threshold, and carbon calculation logic is handled in `/ai`.
-- Collapsible panel is designed for future integration with **real-time compliance results**.
-- Commit message used:  
+### 🧠 Objective  
+Enhance the wallet UI to display sustainability and compliance information alongside FX recommendations, preparing for environmental impact tracking and regulatory readiness.  
 
-### Next Steps
-- In Lovable, connect the collapsible panel to dynamic compliance data.
-- Sync with backend so carbon badge values come from actual transaction analysis.
+---
+
+### ✅ Steps Completed  
+
+1. **Green FX Carbon Badge**  
+   - Designed a badge to show estimated carbon footprint per FX transaction.  
+   - Created `carbon_estimator.py` in `/ai/` to read `carbon_factors.json` and estimate emissions from mock transaction data.  
+   - Added sample data in `/fx_data/transactions_sample.json`.  
+   - Tested script output and stored screenshot in `/screenshots/`.  
+
+2. **Compliance & Risk Collapsible Panel**  
+   - Built a `<details>` collapsible section in `ai_suggestion_component.md` to display compliance snapshot (KYC/AML status, transaction risk, required actions).  
+   - Included status badge styles for Review, Clear, and Blocked.  
+   - Added mock data for residency, sanctions check, and transaction rules.  
+
+3. **Folder Structure Update**  
+   - New files and folders added:  
+     ```
+     ai/
+       carbon_estimator.py
+     fx_data/
+       carbon_factors.json
+       transactions_sample.json
+     lovable-ui/
+       ai_suggestion_component.md (updated)
+     ```
+   - Ensured all outputs/screenshots are in `/screenshots/`.  
+
+4. **Jira Updates**  
+   - Created and moved AIVA-52 and AIVA-53 to **Done** in Sprint 1.  
+
+5. **README Update**  
+   - Added Green FX and Compliance UI tasks to Sprint 1 summary.  
+   - Updated folder structure in README.  
+   - Expanded vision to include environmental impact tracking.  
+
+---
+
+### 📂 Updated Folder Structure  
+
+ai/
+fx_trend_analysis.py
+fx_trend_with_threshold.py
+carbon_estimator.py
+fx_data/
+fxrates.json
+carbon_factors.json
+transactions_sample.json
+lovable-ui/
+ai_suggestion_component.md
+designs/
+screenshots/
+fx_suggestion_output.png
+greenfx_output.png
+compliance_panel_preview.png
+logbook.md
+README.md
+
+
+---
+
+### 🛠 Troubleshooting Notes  
+
+| Issue | Root Cause | Fix |
+|-------|------------|-----|
+| Carbon factors not loading | Wrong relative path in script | Fixed path to `../fx_data/carbon_factors.json` |
+| Lovable UI preview not updating | Old file cached | Re-uploaded updated `ai_suggestion_component.md` |
+| Confusion about where to insert collapsible panel | Unclear in instructions | Clarified placement inside AI Suggestion component below FX recommendation |  
+
+---
+
+### 📸 Output Screenshots  
+- `/screenshots/greenfx_output.png` – Carbon badge output  
+- `/screenshots/compliance_panel_preview.png` – Compliance panel collapsed/expanded view  
+
+---
+
+### 🔁 Next Steps  
+- Integrate carbon estimation script with FX transaction logic.  
+- Begin connecting compliance UI to backend rules.  
+- Start AIVA-15: FX conversion simulation with mock balances.  
+
+---
+
+
+
