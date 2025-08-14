@@ -1,0 +1,5 @@
+[
+  {"id":"tx_001","type":"fx_convert","pair":"USD_AUD","amount_base":250,"method":"card"},
+  {"id":"tx_002","type":"send","currency":"AUD","amount":120,"method":"bank"},
+  {"id":"tx_003","type":"fx_convert","pair":"EUR_AUD","amount_base":90,"method":"wallet"}
+]
