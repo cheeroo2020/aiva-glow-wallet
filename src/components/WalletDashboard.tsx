@@ -11,6 +11,21 @@ const WalletDashboard = () => {
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EUR");
 
+  // Carbon footprint estimation
+  const estimateCarbonFootprint = (transaction: any) => {
+    const baseAmount = parseFloat(transaction.fromAmount);
+    const methodFactor = 0.05; // Default factor for fx transactions
+    const fxBonus = (baseAmount / 100.0) * 0.02; // Small bonus based on amount
+    const totalKg = methodFactor + fxBonus;
+    return Math.round(totalKg * 1000) / 1000; // Round to 3 decimal places
+  };
+
+  const getCarbonBand = (kg: number) => {
+    if (kg < 0.05) return "Low";
+    if (kg < 0.15) return "Medium";
+    return "High";
+  };
+
   const walletBalances = {
     AUD: 550.00,
     USD: 1000.00,
@@ -226,48 +241,72 @@ const WalletDashboard = () => {
             
             {/* Table Rows */}
             <div className="divide-y divide-gray-50">
-              {transactionHistory.map((tx, index) => (
-                <div 
-                  key={tx.id} 
-                  className={`grid grid-cols-12 gap-4 px-6 py-4 hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-indigo-50/30 transition-all duration-200 ${
-                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
-                  }`}
-                >
-                  {/* Date Column */}
-                  <div className="col-span-3 flex flex-col">
-                    <span className="text-sm font-medium text-gray-900">{formatDate(tx.date)}</span>
-                    <span className="text-xs text-gray-500">2024</span>
-                  </div>
-                  
-                  {/* Currency Pair Column */}
-                  <div className="col-span-3 flex items-center space-x-2">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md text-xs font-semibold border border-purple-200">
-                        {tx.from}
-                      </span>
-                      <ArrowRightIcon className="h-3 w-3 text-gray-400" />
-                      <span className="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-md text-xs font-semibold border border-teal-200">
-                        {tx.to}
-                      </span>
+              {transactionHistory.map((tx, index) => {
+                const carbonKg = estimateCarbonFootprint(tx);
+                const carbonBand = getCarbonBand(carbonKg);
+                
+                return (
+                  <div key={tx.id}>
+                    {/* Main Transaction Row */}
+                    <div 
+                      className={`grid grid-cols-12 gap-4 px-6 py-4 hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-indigo-50/30 transition-all duration-200 ${
+                        index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                      }`}
+                    >
+                      {/* Date Column */}
+                      <div className="col-span-3 flex flex-col">
+                        <span className="text-sm font-medium text-gray-900">{formatDate(tx.date)}</span>
+                        <span className="text-xs text-gray-500">2024</span>
+                      </div>
+                      
+                      {/* Currency Pair Column */}
+                      <div className="col-span-3 flex items-center space-x-2">
+                        <div className="flex items-center space-x-1.5">
+                          <span className="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md text-xs font-semibold border border-purple-200">
+                            {tx.from}
+                          </span>
+                          <ArrowRightIcon className="h-3 w-3 text-gray-400" />
+                          <span className="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-md text-xs font-semibold border border-teal-200">
+                            {tx.to}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Amount Column */}
+                      <div className="col-span-3 flex flex-col">
+                        <span className="text-sm font-semibold text-gray-900">
+                          {getCurrencySymbol(tx.to)}{tx.toAmount}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          from {getCurrencySymbol(tx.from)}{tx.fromAmount}
+                        </span>
+                      </div>
+                      
+                      {/* Status Column */}
+                      <div className="col-span-3 flex items-center">
+                        {getStatusBadge(tx.status)}
+                      </div>
+                    </div>
+                    
+                    {/* Carbon Footprint Row */}
+                    <div className={`grid grid-cols-12 gap-4 px-6 pb-3 ${
+                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                    }`}>
+                      <div className="col-span-12">
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200 text-xs">
+                            {carbonKg} kg CO₂ ({carbonBand})
+                          </Badge>
+                          <span className="text-gray-400 text-xs">•</span>
+                          <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-700 h-6 px-2">
+                            Offset
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Amount Column */}
-                  <div className="col-span-3 flex flex-col">
-                    <span className="text-sm font-semibold text-gray-900">
-                      {getCurrencySymbol(tx.to)}{tx.toAmount}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      from {getCurrencySymbol(tx.from)}{tx.fromAmount}
-                    </span>
-                  </div>
-                  
-                  {/* Status Column */}
-                  <div className="col-span-3 flex items-center">
-                    {getStatusBadge(tx.status)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>
