@@ -376,4 +376,24 @@ Improve the FX trend analysis script (`fx_trend_with_threshold.py`) to make it e
 - Integrate this enhanced debugging into a test suite for automated runs.  
 - Move towards AIVA-15: Simulate FX conversions using mock wallet balances.  
 
+---
 
+## 14 August 2025
+
+### Tasks Completed
+- **AIVA-52 & AIVA-53**: Added **Green FX carbon badge** and **Compliance & Risk collapsible panel** to Lovable UI.  
+- Updated `lovable_ui/ai_suggestion_component.md`:
+  - Integrated 🌱 **Green FX** badge showing carbon impact (e.g., 0.42 kg CO₂ Low).
+  - Added collapsible **Compliance & Risk** section (default state: Review).
+  - Included KYC/AML snapshot, transaction risk details, and required actions.
+  - Added info panel outlining APP compliance, AI ethics safeguards, and EDD trigger rules.
+- Linked new UI elements to **mock data outputs** from `/ai/carbon_estimator.py`.
+
+### Notes
+- These changes are **UI placeholders** only; trend, threshold, and carbon calculation logic is handled in `/ai`.
+- Collapsible panel is designed for future integration with **real-time compliance results**.
+- Commit message used:  
+
+### Next Steps
+- In Lovable, connect the collapsible panel to dynamic compliance data.
+- Sync with backend so carbon badge values come from actual transaction analysis.
