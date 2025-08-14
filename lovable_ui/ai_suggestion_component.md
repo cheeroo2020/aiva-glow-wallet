@@ -17,3 +17,51 @@ Appears under the FX conversion module in the wallet UI.
 
 ## Notes
 This is just the UX placeholder. Actual GPT logic is handled in the `/ai/` folder.
+
+---
+
+## Compliance & Risk (Collapsible Panel)
+
+<!-- Default: Review -->
+<details open>
+  <summary>
+    <strong>Compliance & Risk</strong>
+    <span style="margin-left:8px;padding:2px 8px;border-radius:10px;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;">
+      Status: <b>Review</b>
+    </span>
+  </summary>
+
+  <br/>
+
+  <div style="margin:8px 0;">
+    <b>KYC / AML snapshot</b><br/>
+    • Customer: <code>Verified</code> &nbsp;• PEP/Sanctions: <code>Clear</code> &nbsp;• Residency: <code>AU</code>
+  </div>
+
+  <div style="margin:8px 0;">
+    <b>Transaction Risk</b><br/>
+    • Amount: <code>€2,400</code> &nbsp;• Pattern: <code>Normal</code> &nbsp;• Rule: <code>FX-THR-02 (low)</code><br/>
+    • Green FX carbon tag: <code>0.42 kg CO₂</code> — <i>Low</i>
+  </div>
+
+  <div style="margin:8px 0;">
+    <b>Required Action</b><br/>
+    <ul>
+      <li>Auto‑approve threshold met (no extra docs required)</li>
+      <li>Log decision in audit trail</li>
+    </ul>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-top:6px;">
+    <button style="padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;background:#f9fafb;">View audit log</button>
+    <button style="padding:8px 12px;border:1px solid #0284c7;border-radius:8px;background:#e0f2fe;">Resolve</button>
+  </div>
+</details>
+
+<!-- Variants (copy one of these span styles into the <summary> if you want a different state):
+    Clear:
+      <span style="margin-left:8px;padding:2px 8px;border-radius:10px;background:#dcfce7;color:#166534;border:1px solid #22c55e;">Status: <b>Clear</b></span>
+    Blocked:
+      <span style="margin-left:8px;padding:2px 8px;border-radius:10px;background:#fee2e2;color:#991b1b;border:1px solid #ef4444;">Status: <b>Blocked</b></span>
+-->
+
