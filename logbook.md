@@ -474,6 +474,86 @@ README.md
 - Start AIVA-15: FX conversion simulation with mock balances.  
 
 ---
+## 📅 15 August 2025
+**Task ID:** AIVA-15  
+**Title:** Simulate FX conversions with mock balances  
+**Epic:** Smart FX AI Engine → FX Data & API Layer  
+**Status:** ✅ Completed
+
+---
+
+### 🧠 Objective
+Simulate FX conversions between **USD/EUR/AUD** using the latest rate from `fxrates.json`, persist balances in `balances.json`, and print a clear before/after summary. Handle missing pairs via inverses/cross rates and validate sufficient funds.
+
+---
+
+### ✅ Steps Completed
+1. **Created balances file**
+   - `fx_data/balances.json` with starting balances (USD, EUR, AUD).
+2. **Added simulation script**
+   - `ai/fx_conversion_sim.py`:
+     - Loads latest date from `fxrates.json`.
+     - Gets direct rate or computes **inverse/cross via AUD**.
+     - Validates inputs and available balance.
+     - Updates and saves balances after conversion.
+3. **Tested scenarios**
+   - `USD → AUD` (direct).
+   - `AUD → EUR` (cross via AUD).
+   - Verified **insufficient funds** error path.
+4. **Verified persistence**
+   - Re-running shows updated balances in `fx_data/balances.json`.
+
+---
+
+### 🛠 Troubleshooting & Fixes
+| Issue | Cause | Fix |
+|---|---|---|
+| Missing rate error | Pair not in JSON | Compute inverse and cross via **AUD** pivot |
+| Balances not updating | Overwrite vs update | Read → adjust → **save back** to JSON |
+| Path errors running script | Wrong folder | Run from repo root: `cd ~/Documents/GitHub/aiva-glow-wallet` |
+
+---
+
+### 📸 Output Screenshot
+Save as: `screenshots/aiva15_conversion_output.png`  
+**Example run:**
+[FX Conversion Simulation]
+Date used: 2025-08-07
+Rate USD->AUD: 1.513333
+Amount: 200.00 USD → 302.67 AUD
+
+Before:
+USD 1,000.00 | EUR 800.00 | AUD 1,500.00
+
+After:
+USD 800.00 | EUR 800.00 | AUD 1,802.67
+
+---
+
+### 📂 Updated Folder Structure (new today)
+├── ai/
+│ ├── fx_trend_analysis.py
+│ ├── fx_trend_with_threshold.py
+│ └── fx_conversion_sim.py # NEW
+├── fx_data/
+│ ├── fxrates.json
+│ └── balances.json # NEW
+├── lovable-ui/
+├── designs/
+├── screenshots/
+├── logbook.md
+└── README.md
+
+---
+
+### 🔁 Next Steps
+- Surface conversion result in the **Smart FX UI card** (AIVA-10 enhancement).
+- Trigger simulation after user accepts a recommendation.
+- (Optional) Write results to a simple CSV for history.
+
+---
+
+
 
 
 
