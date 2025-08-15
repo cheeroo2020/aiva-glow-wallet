@@ -20,22 +20,25 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ## 🧱 Folder Structure
 
-├── ai/ # Smart FX engine & estimators  
-│   ├── fx_trend_analysis.py  
-│   ├── fx_trend_with_threshold.py  
-│   └── carbon_estimator.py  
-├── fx_data/ # Mock FX, transaction, and carbon data  
-│   ├── fxrates.json  
-│   ├── transactions_sample.json  
-│   └── carbon_factors.json  
-├── lovable_ui/ # UI exported from Lovable (Markdown + assets)  
-│   ├── ai_suggestion_component.md  
-│   ├── compliance_collapsible_panel.md  
-│   └── Smart Fx.png  
-├── designs/ # UI concepts  
-├── screenshots/ # Output snapshots for tracking  
-├── logbook.md # Daily build journal  
-└── README.md # Project overview  
+├── ai/ # Smart FX engine & simulations
+│ ├── fx_trend_analysis.py
+│ ├── fx_trend_with_threshold.py
+│ ├── fx_conversion_sim.py # NEW – mock balance FX simulation
+│ └── carbon_estimator.py
+├── fx_data/ # Mock FX, balances, transaction, and carbon data
+│ ├── fxrates.json
+│ ├── balances.json # NEW – starting USD/EUR/AUD balances
+│ ├── transactions_sample.json
+│ └── carbon_factors.json
+├── lovable_ui/ # UI exported from Lovable (Markdown + assets)
+│ ├── ai_suggestion_component.md
+│ ├── compliance_collapsible_panel.md
+│ └── Smart Fx.png
+├── designs/ # UI concepts
+├── screenshots/ # Output snapshots for tracking
+├── logbook.md # Daily build journal
+└── README.md # Project overview
+
 
 ---
 
@@ -51,6 +54,7 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 | AIVA-10  | Create Lovable UI element for AI suggestion                        | ✅ Done     |
 | AIVA-11  | Test FX trend data with GPT-style response                         | ✅ Done     |
 | AIVA-14  | Add FX threshold logic for convert/wait                            | ✅ Done     |
+| AIVA-15  | Simulate FX conversions with mock balances                         | ✅ Done     |
 | AIVA-52  | Add **Green FX carbon badge** to Smart FX UI                       | ✅ Done     |
 | AIVA-53  | Add **Compliance & Risk collapsible panel** to UI                  | ✅ Done     |
 
@@ -64,23 +68,24 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 ✅ FX Converter UI  
 ✅ Static Transaction Log Display  
 ✅ Smart FX Recommendation Card with **Green FX Carbon Badge**  
-✅ **Compliance & Risk Collapsible Panel** (KYC snapshot, risk details, required actions)
+✅ **Compliance & Risk Collapsible Panel** (KYC snapshot, risk details, required actions)  
 
 ---
 
 ### 2. Smart FX AI Engine (`/ai`)
-
 - `fx_trend_analysis.py` — detects rising/falling trends from mock data.  
 - `fx_trend_with_threshold.py` — adds % change calculation & threshold-based “Convert Now” / “Wait” decisions.  
-- **NEW:** `carbon_estimator.py` — estimates kg CO₂ per transaction using mock factors and assigns Low/Medium/High badge.  
+- `fx_conversion_sim.py` — **NEW**: simulates currency conversions using latest FX rate, updates mock balances, supports inverse & AUD-cross rates, and prevents insufficient fund transfers.  
+- `carbon_estimator.py` — estimates kg CO₂ per transaction using mock factors and assigns Low/Medium/High badge.  
 - Handles missing currency pairs gracefully.
 
-> **Status:** Integrated with UI mockups in Lovable.
+> **Status:** Integrated with UI mockups in Lovable and persistent mock data store.
 
 ---
 
 ### 3. FX Data Store (`/fx_data`)
 - `fxrates.json` — 7-day FX rates.  
+- `balances.json` — starting mock balances (USD, EUR, AUD).  
 - `transactions_sample.json` — mock transaction history for testing.  
 - `carbon_factors.json` — mock carbon intensity per currency pair.
 
@@ -92,23 +97,22 @@ All outputs now tracked in `/screenshots` and `/logbook.md`.
 ---
 
 ### 5. Compliance & Risk Engine (Epic)
-- Collapsible UI panel for compliance/risk checks in Lovable.
-- KYC/AML snapshot, transaction risk classification, required actions.
+- Collapsible UI panel for compliance/risk checks in Lovable.  
+- KYC/AML snapshot, transaction risk classification, required actions.  
 - Placeholder for Australian Privacy Principles (APPs) compliance and AI ethics safeguards.
 
 ---
 
 ## 🧭 What’s Next
-- [ ] AIVA-15: Simulate FX conversions with mock balances  
-- [ ] Connect carbon estimation to live transaction flow  
-- [ ] Add API-based FX rates and live carbon intensity data  
-- [ ] Link compliance rules to real-time mock transactions  
+- [ ] Connect FX conversion simulation output into Smart FX UI card.  
+- [ ] Link carbon estimation to real-time simulated transactions.  
+- [ ] Add API-based FX rates and live carbon intensity data.  
+- [ ] Link compliance rules to real-time mock transactions.  
 
 ---
 
 ## 👤 Built By
-
 **Chirantan (Chris) Gogoi**  
 📍 Based in Australia  
 🔭 Exploring the future of money, wallets, AI, and cross-border finance  
-💼 Solo founder in learning & prototyping phase  
+💼 Solo founder in learning & prototyping phase
