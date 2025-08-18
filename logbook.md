@@ -553,6 +553,144 @@ USD 800.00 | EUR 800.00 | AUD 1,802.67
 
 ---
 
+# 📘 Aiva Glow Wallet – Logbook  
+**Date:** 18 August 2025  
+**Focus:** AIVA-15 — Simulate FX conversion using mock data (with Green FX + Compliance stubs)
+
+---
+
+## 🎯 Objective
+Build a tiny end-to-end “conversion” pipeline that:
+- Keeps in-memory **balances** (AUD / USD / EUR).  
+- Converts using **mock FX rates**.  
+- Logs each conversion with a **carbon estimate** (Green FX badge source) and a **compliance status** (“Clear” / “Review Needed”).  
+
+This gives us a safe playground to later plug into the UI card and the collapsible Compliance panel.
+
+---
+
+## 🧩 Files touched / created
+ai/
+fx_simulation.py <-- NEW (core of AIVA-15 today)
+fx_trend_with_threshold.py (unchanged)
+carbon_estimator.py (unchanged)
+fx_data/
+(no change today)
+
+
+---
+
+## 🛠 What I built
+
+### 1) `fx_simulation.py` (final structure)
+
+Key sections in order (the order matters in Python!):
+
+1. **balances** – starting money per currency  
+2. **fx_rates** – mock rates for the pairs we use  
+3. **carbon_factors** – kg CO₂ per 1000 units converted  
+4. **transactions** – in-memory log list  
+5. **compliance_check(amount, from_cur, to_cur)** – returns `"Review Needed"` if amount > 10,000, else `"Clear"`  
+6. **log_transaction(...)** – appends to `transactions` with carbon + compliance  
+7. **convert(amount, from_cur, to_cur)** – checks rate & funds, updates balances, calls `log_transaction`  
+8. **test runs** – prints initial balances, runs two conversions, prints all transactions  
+
+> ⚠️ Why order matters?  
+> Python must **see** a function before it is called.  
+> If `convert()` calls `log_transaction()`, then `log_transaction()` must be defined **above** `convert()` in the file.
+
+---
+
+### 2) How to run it
+From your repo root:
+
+```bash
+cd ~/Documents/GitHub/aiva-glow-wallet/ai
+python3 fx_simulation.py
+
+Expected output (shape):
+
+Initial Balances: {'AUD': 1000.0, 'USD': 500.0, 'EUR': 300.0}
+Converted 100 AUD → 66.00 USD
+Logged Transaction: { from: 'AUD', to: 'USD', amount: 100, converted: 66.0, carbon: '0.xx kg CO₂', compliance: 'Clear' }
+Converted 200 USD → 182.00 EUR
+Logged Transaction: { from: 'USD', to: 'EUR', amount: 200, converted: 182.0, carbon: '0.xx kg CO₂', compliance: 'Clear' }
+All Transactions: [ ...two entries... ]
+
+🧨 Bug I hit & how I fixed it
+
+Error:
+NameError: name 'log_transaction' is not defined
+
+Root cause:
+convert() was above log_transaction() in the file; Python hadn’t parsed log_transaction() yet when it was called.
+
+Fix:
+Reordered the file so log_transaction() is defined before convert().
+This is a classic Python rule: definitions must appear before first use.
+
+✅ Verification checklist (what I confirmed)
+
+ Balances update correctly after each conversion.
+
+ Each transaction logs a carbon estimate using carbon_factors.
+
+ Compliance returns "Clear" for small amounts (≤ 10,000).
+
+ Output prints updated balances and a final transactions list.
+
+ Running the script from ai/ works with python3 fx_simulation.py.
+
+🧠 What I learned (today)
+
+Function order matters in Python. If A calls B, define B before A.
+
+A minimal simulation can be powerful: balances → convert → log → annotate with carbon & compliance.
+
+Keeping concerns separated (rates, balances, estimators, compliance) makes later UI wiring simple.
+
+🧪 Sample output interpretation (why it matters)
+
+Carbon (e.g., “0.42 kg CO₂”) comes from:
+carbon_estimate = (amount / 1000) * carbon_factor[(from, to)]
+
+
+This is the number we surface as the Green FX badge.
+
+Compliance status ("Clear" vs "Review Needed") will drive the label on the
+Compliance & Risk collapsible panel in the UI (e.g., “Status: Review”).
+
+🔁 Next steps (tomorrow)
+
+Hook the simulation outputs to the UI copy (Lovable content):
+
+Show the Green FX badge value next to the Smart FX card.
+
+Set the Compliance panel chip based on the latest transaction status.
+
+Add a couple more pairs/rates & try a "Review Needed" case (e.g., amount > 10000) to see the panel flip.
+
+(Optional) Persist transactions to a small JSON file for a simple history view.
+
+---
+
+📂 Current structure after today
+ai/
+  fx_simulation.py            # NEW – AIVA-15 conversion demo (today)
+  fx_trend_analysis.py
+  fx_trend_with_threshold.py
+  carbon_estimator.py
+fx_data/
+  fxrates.json
+  transactions_sample.json
+  carbon_factors.json
+lovable_ui/
+  ai_suggestion_component.md
+  compliance_collapsible_panel.md
+  Smart Fx.png
+screenshots/
+  (add a screenshot of the terminal run if you want traceability)
+
 
 
 
