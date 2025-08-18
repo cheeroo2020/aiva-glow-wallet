@@ -8,13 +8,13 @@
 
 Aiva is a build + learn journey to explore how the future of finance is being shaped by:
 
-- Smart FX engines
-- Real-time trend data
-- AI UX logic
-- Environmental impact tracking (**Green FX**)
-- Multicurrency interoperability
-- Blockchain + DeFi infrastructure
-- Compliance & risk intelligence
+- Smart FX engines  
+- Real-time trend data  
+- AI UX logic  
+- Environmental impact tracking (**Green FX**)  
+- Multicurrency interoperability  
+- Blockchain + DeFi infrastructure  
+- Compliance & risk intelligence  
 
 ---
 
@@ -25,15 +25,18 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 │ ├── fx_trend_with_threshold.py
 │ ├── fx_conversion_sim.py # NEW – mock balance FX simulation
 │ └── carbon_estimator.py
+│
 ├── fx_data/ # Mock FX, balances, transaction, and carbon data
 │ ├── fxrates.json
 │ ├── balances.json # NEW – starting USD/EUR/AUD balances
 │ ├── transactions_sample.json
 │ └── carbon_factors.json
+│
 ├── lovable_ui/ # UI exported from Lovable (Markdown + assets)
 │ ├── ai_suggestion_component.md
 │ ├── compliance_collapsible_panel.md
 │ └── Smart Fx.png
+│
 ├── designs/ # UI concepts
 ├── screenshots/ # Output snapshots for tracking
 ├── logbook.md # Daily build journal
@@ -42,7 +45,7 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ---
 
-## 🧑‍💻 Sprint 1 Summary (1 Aug – 15 Aug)
+## 🧑‍💻 Sprint 1 Summary (1 Aug – 18 Aug)
 
 | Task ID  | Title                                                              | Status      |
 |----------|--------------------------------------------------------------------|-------------|
@@ -87,7 +90,7 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 - `fxrates.json` — 7-day FX rates.  
 - `balances.json` — starting mock balances (USD, EUR, AUD).  
 - `transactions_sample.json` — mock transaction history for testing.  
-- `carbon_factors.json` — mock carbon intensity per currency pair.
+- `carbon_factors.json` — mock carbon intensity per currency pair.  
 
 ---
 
@@ -112,6 +115,7 @@ All outputs now tracked in `/screenshots` and `/logbook.md`.
 ---
 
 ## 👤 Built By
+
 **Chirantan (Chris) Gogoi**  
 📍 Based in Australia  
 🔭 Exploring the future of money, wallets, AI, and cross-border finance  
