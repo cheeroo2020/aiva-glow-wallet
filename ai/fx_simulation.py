@@ -34,10 +34,53 @@ def convert(amount, from_cur, to_cur):
     if balances[from_cur] >= amount:
         balances[from_cur] -= amount
         balances[to_cur] += converted
+        log_transaction(amount, from_cur, to_cur, converted)
         print(f"Converted {amount} {from_cur} → {converted:.2f} {to_cur}")
+
     else:
         print("Insufficient funds")
 
     print("Updated Balances:", balances)
 
 convert(100, "AUD", "USD")
+
+# Mock carbon intensity factors (kg CO2 per 1000 units converted)
+carbon_factors = {
+    ("AUD", "USD"): 0.42,
+    ("USD", "AUD"): 0.45,
+    ("EUR", "USD"): 0.50,
+    ("USD", "EUR"): 0.40
+}
+
+# Simple compliance stub
+def compliance_check(amount, from_cur, to_cur):
+    if amount > 10000:
+        return "Review Needed"
+    return "Clear"
+
+# Transactions log
+transactions = []
+
+def log_transaction(amount, from_cur, to_cur, converted):
+    # Estimate carbon
+    carbon_factor = carbon_factors.get((from_cur, to_cur), 0.5)
+    carbon_estimate = (amount / 1000) * carbon_factor
+
+    # Compliance check
+    compliance_status = compliance_check(amount, from_cur, to_cur)
+
+    tx = {
+        "from": from_cur,
+        "to": to_cur,
+        "amount": amount,
+        "converted": converted,
+        "carbon": f"{carbon_estimate:.2f} kg CO₂",
+        "compliance": compliance_status
+    }
+    transactions.append(tx)
+    print("Logged Transaction:", tx)
+
+convert(200, "USD", "EUR")
+print("All Transactions:", transactions)
+
+
