@@ -82,5 +82,3 @@ def log_transaction(amount, from_cur, to_cur, converted):
 
 convert(200, "USD", "EUR")
 print("All Transactions:", transactions)
-
-
