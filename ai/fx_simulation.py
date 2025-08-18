@@ -1,50 +1,27 @@
 # fx_simulation.py
 
-# Mock balances: how much money we start with
+# ------------------------
+# Mock balances
+# ------------------------
 balances = {
-    "AUD": 1000.0,   # 1000 Australian dollars
-    "USD": 500.0,    # 500 US dollars
-    "EUR": 300.0     # 300 Euros
+    "AUD": 1000.0,
+    "USD": 500.0,
+    "EUR": 300.0
 }
 
-# Mock FX rates: conversion rates between currencies
+# ------------------------
+# FX rates
+# ------------------------
 fx_rates = {
-    ("AUD", "USD"): 0.66,   # 1 AUD = 0.66 USD
-    ("USD", "AUD"): 1.52,   # 1 USD = 1.52 AUD
-    ("EUR", "USD"): 1.10,   # 1 EUR = 1.10 USD
-    ("USD", "EUR"): 0.91    # 1 USD = 0.91 EUR
+    ("AUD", "USD"): 0.66,
+    ("USD", "AUD"): 1.52,
+    ("EUR", "USD"): 1.10,
+    ("USD", "EUR"): 0.91
 }
 
-# Print the balances to check if setup works
-print("Initial Balances:", balances)
-
-# Function to convert money between currencies
-def convert(amount, from_cur, to_cur):
-    pair = (from_cur, to_cur)
-
-    # Check if rate exists
-    if pair not in fx_rates:
-        print(f"No rate for {from_cur}->{to_cur}")
-        return
-
-    rate = fx_rates[pair]
-    converted = amount * rate
-
-    # Check if we have enough balance
-    if balances[from_cur] >= amount:
-        balances[from_cur] -= amount
-        balances[to_cur] += converted
-        log_transaction(amount, from_cur, to_cur, converted)
-        print(f"Converted {amount} {from_cur} → {converted:.2f} {to_cur}")
-
-    else:
-        print("Insufficient funds")
-
-    print("Updated Balances:", balances)
-
-convert(100, "AUD", "USD")
-
-# Mock carbon intensity factors (kg CO2 per 1000 units converted)
+# ------------------------
+# Carbon factors (kg CO₂ per 1000 units)
+# ------------------------
 carbon_factors = {
     ("AUD", "USD"): 0.42,
     ("USD", "AUD"): 0.45,
@@ -52,21 +29,25 @@ carbon_factors = {
     ("USD", "EUR"): 0.40
 }
 
-# Simple compliance stub
+# ------------------------
+# Transactions log
+# ------------------------
+transactions = []
+
+# ------------------------
+# Compliance stub
+# ------------------------
 def compliance_check(amount, from_cur, to_cur):
     if amount > 10000:
         return "Review Needed"
     return "Clear"
 
-# Transactions log
-transactions = []
-
+# ------------------------
+# Log a transaction
+# ------------------------
 def log_transaction(amount, from_cur, to_cur, converted):
-    # Estimate carbon
     carbon_factor = carbon_factors.get((from_cur, to_cur), 0.5)
     carbon_estimate = (amount / 1000) * carbon_factor
-
-    # Compliance check
     compliance_status = compliance_check(amount, from_cur, to_cur)
 
     tx = {
@@ -80,5 +61,33 @@ def log_transaction(amount, from_cur, to_cur, converted):
     transactions.append(tx)
     print("Logged Transaction:", tx)
 
+# ------------------------
+# Convert
+# ------------------------
+def convert(amount, from_cur, to_cur):
+    pair = (from_cur, to_cur)
+
+    if pair not in fx_rates:
+        print(f"No rate for {from_cur}->{to_cur}")
+        return
+
+    rate = fx_rates[pair]
+    converted = amount * rate
+
+    if balances[from_cur] >= amount:
+        balances[from_cur] -= amount
+        balances[to_cur] += converted
+        log_transaction(amount, from_cur, to_cur, converted)
+        print(f"Converted {amount} {from_cur} → {converted:.2f} {to_cur}")
+    else:
+        print("Insufficient funds")
+
+    print("Updated Balances:", balances)
+
+# ------------------------
+# Test
+# ------------------------
+print("Initial Balances:", balances)
+convert(100, "AUD", "USD")
 convert(200, "USD", "EUR")
 print("All Transactions:", transactions)
