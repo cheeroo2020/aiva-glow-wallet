@@ -17,3 +17,27 @@ fx_rates = {
 
 # Print the balances to check if setup works
 print("Initial Balances:", balances)
+
+# Function to convert money between currencies
+def convert(amount, from_cur, to_cur):
+    pair = (from_cur, to_cur)
+
+    # Check if rate exists
+    if pair not in fx_rates:
+        print(f"No rate for {from_cur}->{to_cur}")
+        return
+
+    rate = fx_rates[pair]
+    converted = amount * rate
+
+    # Check if we have enough balance
+    if balances[from_cur] >= amount:
+        balances[from_cur] -= amount
+        balances[to_cur] += converted
+        print(f"Converted {amount} {from_cur} → {converted:.2f} {to_cur}")
+    else:
+        print("Insufficient funds")
+
+    print("Updated Balances:", balances)
+
+convert(100, "AUD", "USD")
