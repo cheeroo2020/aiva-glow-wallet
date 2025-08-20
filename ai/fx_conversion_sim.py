@@ -1,97 +1,174 @@
+#!/usr/bin/env python3
+"""
+FX Conversion Simulator
+- Loads latest FX rates (fx_data/fxrates.json)
+- Derives inverses and crosses via AUD when needed
+- Updates/saves balances (fx_data/balances.json)
+- Estimates CO2 (fx_data/carbon_factors.json)
+- Runs a simple compliance check
+- Appends a transaction record (fx_data/transactions_sample.json)
+
+Usage:
+  python3 ai/fx_conversion_sim.py <SRC> <DST> <AMOUNT>
+  e.g. python3 ai/fx_conversion_sim.py USD AUD 200
+"""
+
 import json
 import sys
 from collections import OrderedDict
 from pathlib import Path
+from datetime import datetime
 
-FX_RATES_PATH = Path("fx_data/fxrates.json")
-BALANCES_PATH = Path("fx_data/balances.json")
+# ---------- Paths ----------
+FX_RATES_PATH         = Path("fx_data/fxrates.json")
+BALANCES_PATH         = Path("fx_data/balances.json")
+CARBON_FACTORS_PATH   = Path("fx_data/carbon_factors.json")
+TX_LOG_PATH           = Path("fx_data/transactions_sample.json")
 
 SUPPORTED = {"USD", "EUR", "AUD"}
 
-def load_json_ordered(path: Path):
-    with open(path, "r") as f:
-        data = json.load(f, object_pairs_hook=OrderedDict)
-    return data
 
+# ---------- Small JSON helpers ----------
+def load_json_ordered(path: Path):
+    """Load JSON preserving order (useful for date->rates mapping)."""
+    with open(path, "r") as f:
+        return json.load(f, object_pairs_hook=OrderedDict)
+
+def load_json(path: Path, default):
+    """Load JSON (or return default if file missing/empty)."""
+    if not path.exists():
+        return default
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        return default
+
+def save_json(path: Path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w") as f:
+        json.dump(data, f, indent=2)
+
+
+# ---------- FX rate helpers ----------
 def latest_day_rates(fx):
-    # fx is a dict of date -> {pair: rate}
-    # dates are ISO strings; max() gets the latest
+    """
+    fx is a dict like:
+    {
+      "2025-08-01": {"USD_AUD": 1.52, "EUR_AUD": 1.66},
+      ...
+    }
+    """
     latest_date = max(fx.keys())
     return latest_date, fx[latest_date]
 
-def get_rate(day_rates: dict, src: str, dst: str):
+def _inv(x: float) -> float:
+    return 1.0 / float(x)
+
+def get_rate(day_rates: dict, src: str, dst: str) -> float:
     """
-    We expect fxrates.json to include:
+    We expect fxrates.json to include base pairs quoted vs AUD:
       - USD_AUD
       - EUR_AUD
-    We derive missing inverses, e.g., AUD_USD = 1 / USD_AUD
-    And cross rates via AUD (pivot), e.g., USD_EUR = USD_AUD / EUR_AUD
+    We derive:
+      - inverses: AUD_USD, AUD_EUR
+      - crosses via AUD: USD_EUR, EUR_USD
+    Also returns direct pairs if present (e.g., USD_AUD).
     """
     if src == dst:
         return 1.0
 
-    # Helper to read a direct pair if present
-    def direct(pair):
-        return day_rates.get(pair, None)
-
-    # Try direct
+    # 1) direct
     direct_key = f"{src}_{dst}"
-    r = direct(direct_key)
-    if r is not None:
-        return float(r)
+    if direct_key in day_rates:
+        return float(day_rates[direct_key])
 
-    # Build via AUD pivot if possible
-    # Known base pairs in your mock: USD_AUD and EUR_AUD
-    # We compute inverses and crosses as needed.
-    def inv(x):  # safe inverse
-        return 1.0 / float(x)
+    # 2) build a small derived table from USD_AUD / EUR_AUD if present
+    usd_aud = day_rates.get("USD_AUD")
+    eur_aud = day_rates.get("EUR_AUD")
 
-    USD_AUD = day_rates.get("USD_AUD", None)
-    EUR_AUD = day_rates.get("EUR_AUD", None)
-
-    # Precompute a small table of available/derived rates
     derived = {}
-    if USD_AUD is not None:
-        derived["USD_AUD"] = float(USD_AUD)
-        derived["AUD_USD"] = inv(USD_AUD)
-    if EUR_AUD is not None:
-        derived["EUR_AUD"] = float(EUR_AUD)
-        derived["AUD_EUR"] = inv(EUR_AUD)
+    if usd_aud is not None:
+        usd_aud = float(usd_aud)
+        derived["USD_AUD"] = usd_aud
+        derived["AUD_USD"] = _inv(usd_aud)
 
-    # Crosses via AUD if both known
+    if eur_aud is not None:
+        eur_aud = float(eur_aud)
+        derived["EUR_AUD"] = eur_aud
+        derived["AUD_EUR"] = _inv(eur_aud)
+
+    # crosses if both known
     if ("USD_AUD" in derived) and ("EUR_AUD" in derived):
-        # USD_EUR = USD_AUD / EUR_AUD (because both are quoted vs AUD)
         derived["USD_EUR"] = derived["USD_AUD"] / derived["EUR_AUD"]
-        derived["EUR_USD"] = 1.0 / derived["USD_EUR"]
+        derived["EUR_USD"] = _inv(derived["USD_EUR"])
 
-    # Try to return from derived
-    key = f"{src}_{dst}"
-    if key in derived:
-        return derived[key]
+    # return from derived if available
+    if direct_key in derived:
+        return derived[direct_key]
 
-    raise ValueError(f"No rate available for {src}->{dst}. Check fx_data/fxrates.json pairs.")
+    raise ValueError(f"No rate available for {src}->{dst}. "
+                     f"Check fx_data/fxrates.json pairs (need USD_AUD and/or EUR_AUD).")
 
-def load_balances(path: Path):
-    with open(path, "r") as f:
-        return json.load(f)
 
-def save_balances(path: Path, balances: dict):
-    with open(path, "w") as f:
-        json.dump(balances, f, indent=2)
+# ---------- Carbon + Compliance ----------
+def load_carbon_factor(pair_key: str) -> float:
+    """
+    Reads fx_data/carbon_factors.json expecting keys like "USD_AUD": 0.42
+    Returns a default if missing.
+    """
+    factors = load_json(CARBON_FACTORS_PATH, default={})
+    return float(factors.get(pair_key, 0.5))  # fallback default
 
-def fmt_money(x):  # simple formatting
+def estimate_carbon_kg(amount_src: float, pair_key: str) -> float:
+    """
+    Very simple model: linear factor per 1000 units converted.
+    E.g., factor=0.42 means 0.42 kg CO2 per 1000 source currency units.
+    """
+    factor = load_carbon_factor(pair_key)
+    return (amount_src / 1000.0) * factor
+
+def carbon_badge(kg: float) -> str:
+    if kg < 0.5:
+        return "Low"
+    if kg < 2.0:
+        return "Medium"
+    return "High"
+
+def compliance_check(amount_src: float, src: str, dst: str) -> str:
+    """
+    Minimal stub:
+    - amounts > 10,000 require review
+    - you can extend with per‑currency rules, velocity checks, etc.
+    """
+    if amount_src > 10_000:
+        return "Review"
+    return "Clear"
+
+
+# ---------- Formatting ----------
+def fmt_money(x: float) -> str:
     return f"{x:,.2f}"
 
+def fmt_kg(x: float) -> str:
+    return f"{x:.2f} kg CO₂"
+
+
+# ---------- Core simulation ----------
 def simulate(src: str, dst: str, amount: float):
-    # Load data
+    # Load FX + latest date
     fx_all = load_json_ordered(FX_RATES_PATH)
     latest_date, day_rates = latest_day_rates(fx_all)
-    balances = load_balances(BALANCES_PATH)
+
+    # Load balances
+    balances = load_json(BALANCES_PATH, default={"USD": 1000.0, "EUR": 1000.0, "AUD": 1000.0})
 
     # Basic checks
-    src = src.upper(); dst = dst.upper()
+    src = src.upper().strip()
+    dst = dst.upper().strip()
+
     if src not in SUPPORTED or dst not in SUPPORTED:
-        raise ValueError(f"Only {SUPPORTED} supported right now.")
+        raise ValueError(f"Only {sorted(SUPPORTED)} supported right now.")
     if amount <= 0:
         raise ValueError("Amount must be positive.")
     if balances.get(src, 0.0) < amount:
@@ -99,37 +176,83 @@ def simulate(src: str, dst: str, amount: float):
 
     # Rate lookup
     rate = get_rate(day_rates, src, dst)
-    received = amount * rate
+    received = round(amount * rate, 2)
 
-    # Before snapshot
+    # Snapshot before
     before = balances.copy()
 
     # Apply conversion
     balances[src] = round(balances[src] - amount, 2)
     balances[dst] = round(balances.get(dst, 0.0) + received, 2)
 
-    # Output
+    # Carbon + Compliance
+    pair_key = f"{src}_{dst}"
+    co2_kg = estimate_carbon_kg(amount, pair_key)
+    badge = carbon_badge(co2_kg)
+    compliance = compliance_check(amount, src, dst)
+
+    # Append transaction
+    tx_log = load_json(TX_LOG_PATH, default=[])
+    tx_entry = {
+        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "fx_date_used": latest_date,
+        "pair": pair_key,
+        "rate": round(rate, 6),
+        "amount_src": round(amount, 2),
+        "amount_dst": received,
+        "balances_before": {
+            "USD": before.get("USD", 0.0),
+            "EUR": before.get("EUR", 0.0),
+            "AUD": before.get("AUD", 0.0),
+        },
+        "balances_after": {
+            "USD": balances.get("USD", 0.0),
+            "EUR": balances.get("EUR", 0.0),
+            "AUD": balances.get("AUD", 0.0),
+        },
+        "carbon": {
+            "kg": round(co2_kg, 2),
+            "badge": badge
+        },
+        "compliance": compliance
+    }
+    tx_log.append(tx_entry)
+
+    # Persist changes
+    save_json(BALANCES_PATH, balances)
+    save_json(TX_LOG_PATH, tx_log)
+
+    # ---- Output ----
     print("[FX Conversion Simulation]")
     print(f"Date used: {latest_date}")
     print(f"Rate {src}->{dst}: {rate:.6f}")
     print(f"Amount: {fmt_money(amount)} {src}  →  {fmt_money(received)} {dst}\n")
 
     print("Before:")
-    print(f"  USD {fmt_money(before.get('USD',0))} | EUR {fmt_money(before.get('EUR',0))} | AUD {fmt_money(before.get('AUD',0))}")
+    print(f"  USD {fmt_money(before.get('USD',0))} | "
+          f"EUR {fmt_money(before.get('EUR',0))} | "
+          f"AUD {fmt_money(before.get('AUD',0))}")
 
     print("\nAfter:")
-    print(f"  USD {fmt_money(balances.get('USD',0))} | EUR {fmt_money(balances.get('EUR',0))} | AUD {fmt_money(balances.get('AUD',0))}")
+    print(f"  USD {fmt_money(balances.get('USD',0))} | "
+          f"EUR {fmt_money(balances.get('EUR',0))} | "
+          f"AUD {fmt_money(balances.get('AUD',0))}")
 
-    # Save updated balances
-    save_balances(BALANCES_PATH, balances)
+    print("\nImpact & Controls:")
+    print(f"  Carbon: {fmt_kg(co2_kg)}  ({badge})  |  Compliance: {compliance}")
 
+    print("\nOne‑liner:")
+    print(f"  {src}->{dst} @ {rate:.4f} | {fmt_money(amount)} {src} → {fmt_money(received)} {dst} "
+          f"| CO₂ {fmt_kg(co2_kg)} ({badge}) | {compliance}")
+
+
+# ---------- CLI ----------
 def main():
-    # CLI usage:
-    #   python3 ai/fx_conversion_sim.py USD AUD 200
     if len(sys.argv) != 4:
         print("Usage: python3 ai/fx_conversion_sim.py <SRC> <DST> <AMOUNT>")
         print("Example: python3 ai/fx_conversion_sim.py USD AUD 200")
         sys.exit(1)
+
     src, dst, amount_str = sys.argv[1], sys.argv[2], sys.argv[3]
     try:
         amount = float(amount_str)
@@ -138,6 +261,7 @@ def main():
         sys.exit(1)
 
     simulate(src, dst, amount)
+
 
 if __name__ == "__main__":
     main()
