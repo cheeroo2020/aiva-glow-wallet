@@ -691,6 +691,114 @@ lovable_ui/
 screenshots/
   (add a screenshot of the terminal run if you want traceability)
 
+---
+
+# 📘 Logbook Entry — 20 August 2025
+
+### **Task ID:** AIVA-15  
+**Title:** Simulate FX conversions with mock balances  
+**Epic:** FX Data & API Layer  
+**Status:** ✅ Completed  
+
+---
+
+### 🧠 Objective  
+Build a simulation that allows converting between currencies (USD, EUR, AUD) using mock balances and FX rates. Add carbon impact estimates and compliance checks.
+
+---
+
+### 📂 Steps Completed  
+
+1. **Set up `fx_conversion_sim.py`:**  
+   - Created a CLI script to simulate FX conversions.  
+   - Script loads latest rates from `fx_data/fxrates.json`.  
+   - Loads balances from `fx_data/balances.json`.  
+
+2. **Implemented conversion logic:**  
+   - Deducts amount from source balance.  
+   - Adds converted amount to destination balance.  
+   - Prevents insufficient fund transfers.  
+
+3. **Rate calculation:**  
+   - Supports direct pairs (`USD_AUD`, `EUR_AUD`).  
+   - Supports inverse pairs (e.g., `AUD_USD`).  
+   - Supports cross rates via AUD pivot (e.g., `USD_EUR`).  
+
+4. **Carbon estimation:**  
+   - `estimate_carbon_kg()` calculates emissions in kg CO₂.  
+   - Adds **Low/Medium/High** badge depending on thresholds.  
+
+5. **Compliance check:**  
+   - Transactions >10,000 flagged as `"Review Needed"`.  
+   - Normal transactions marked `"Clear"`.  
+
+6. **Test run in terminal:**  
+   ```bash
+   python3 ai/fx_conversion_sim.py USD AUD 200
+
+✅ Successfully converted USD → AUD, updated balances, printed carbon + compliance tags.
+
+
+📸 Output Example
+[FX Conversion Simulation]  
+Date used: 2025-08-07  
+Rate USD->AUD: 1.500000  
+Amount: 200.00 USD → 300.00 AUD  
+
+Before:  
+  USD 600.00 | EUR 986.34 | AUD 1,800.00  
+
+After:  
+  USD 400.00 | EUR 986.34 | AUD 2,100.00  
+
+Impact & Controls:  
+  Carbon: 0.10 kg CO₂ (Low) | Compliance: Clear  
+
+One-liner:  
+  USD->AUD @ 1.5000 | 200.00 USD → 300.00 AUD | CO₂ 0.10 kg (Low) | Clear
+
+---
+
+# 📊 Sprint 2 Midway Health Report — 23 August 2025
+
+### 🏷️ Sprint: AIVA Sprint 2 (15–29 Aug)
+
+---
+
+### ✅ Current Scope (In Progress)
+- **AIVA-17:** Create GitHub repo aiva-wallet → In Progress  
+- **AIVA-18:** Write README.md with vision and stack → In Progress  
+- **AIVA-19:** Add mockdata and ai folders in GitHub → In Progress  
+
+---
+
+### 📂 Backlog (To Do, planned for Sprint 3)
+- **AIVA-21:** Set key milestone dates  
+- **AIVA-22:** Plan pitch deck content (Notion/Canva)  
+- **AIVA-46 → AIVA-51:** Compliance & Risk epic tasks (KYC, Audit trail, APPs, Alerts, Ethics)  
+
+---
+
+### 🚦 Health Status
+- Sprint 2 is **on track**.  
+- Repo + README nearly ready to close.  
+- Simulation tested successfully (`fx_conversion_sim.py`).  
+- All deliverables can be finished by **end of August**.  
+
+---
+
+### 📸 Key Demo Proof
+- FX conversion sim (USD→AUD, Aug 20 run) shows balances update, carbon badge + compliance output.  
+- README updated with new folder structure.  
+
+---
+
+### 🧭 Next Steps
+- Finalize Sprint 2 by committing:  
+  - Updated `README.md`  
+  - Updated folder structure (`ai/`, `fx_data/`)  
+  - Screenshots of CLI runs  
+- Prepare ground for **Sprint 3 (Compliance epic)** starting **Sep 1**.  
 
 
 
