@@ -757,5 +757,49 @@ Impact & Controls:
 One-liner:  
   USD->AUD @ 1.5000 | 200.00 USD → 300.00 AUD | CO₂ 0.10 kg (Low) | Clear
 
+---
+
+# 📊 Sprint 2 Midway Health Report — 23 August 2025
+
+### 🏷️ Sprint: AIVA Sprint 2 (15–29 Aug)
+
+---
+
+### ✅ Current Scope (In Progress)
+- **AIVA-17:** Create GitHub repo aiva-wallet → In Progress  
+- **AIVA-18:** Write README.md with vision and stack → In Progress  
+- **AIVA-19:** Add mockdata and ai folders in GitHub → In Progress  
+
+---
+
+### 📂 Backlog (To Do, planned for Sprint 3)
+- **AIVA-21:** Set key milestone dates  
+- **AIVA-22:** Plan pitch deck content (Notion/Canva)  
+- **AIVA-46 → AIVA-51:** Compliance & Risk epic tasks (KYC, Audit trail, APPs, Alerts, Ethics)  
+
+---
+
+### 🚦 Health Status
+- Sprint 2 is **on track**.  
+- Repo + README nearly ready to close.  
+- Simulation tested successfully (`fx_conversion_sim.py`).  
+- All deliverables can be finished by **end of August**.  
+
+---
+
+### 📸 Key Demo Proof
+- FX conversion sim (USD→AUD, Aug 20 run) shows balances update, carbon badge + compliance output.  
+- README updated with new folder structure.  
+
+---
+
+### 🧭 Next Steps
+- Finalize Sprint 2 by committing:  
+  - Updated `README.md`  
+  - Updated folder structure (`ai/`, `fx_data/`)  
+  - Screenshots of CLI runs  
+- Prepare ground for **Sprint 3 (Compliance epic)** starting **Sep 1**.  
+
+
 
 
