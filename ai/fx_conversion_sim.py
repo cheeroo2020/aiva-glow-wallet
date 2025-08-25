@@ -6,7 +6,7 @@ FX Conversion Simulator
 - Updates/saves balances (fx_data/balances.json)
 - Estimates CO2 (fx_data/carbon_factors.json)
 - Runs a simple compliance check
-- Appends a transaction record (fx_data/transactions_sample.json)
+- Appends a transaction record (fx_data/transactions_log.json)
 
 Usage:
   python3 ai/fx_conversion_sim.py <SRC> <DST> <AMOUNT>
@@ -15,6 +15,7 @@ Usage:
 
 import json
 import sys
+import uuid
 from collections import OrderedDict
 from pathlib import Path
 from datetime import datetime
@@ -23,7 +24,7 @@ from datetime import datetime
 FX_RATES_PATH         = Path("fx_data/fxrates.json")
 BALANCES_PATH         = Path("fx_data/balances.json")
 CARBON_FACTORS_PATH   = Path("fx_data/carbon_factors.json")
-TX_LOG_PATH           = Path("fx_data/transactions_sample.json")
+TX_LOG_PATH           = Path("fx_data/transactions_log.json")  # <— switched to persistent log
 
 SUPPORTED = {"USD", "EUR", "AUD"}
 
@@ -35,7 +36,7 @@ def load_json_ordered(path: Path):
         return json.load(f, object_pairs_hook=OrderedDict)
 
 def load_json(path: Path, default):
-    """Load JSON (or return default if file missing/empty)."""
+    """Load JSON (or return default if file missing/empty/invalid)."""
     if not path.exists():
         return default
     try:
@@ -48,6 +49,12 @@ def save_json(path: Path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
+
+def append_tx_log(entry: dict):
+    """Append one transaction dict to fx_data/transactions_log.json safely."""
+    log = load_json(TX_LOG_PATH, default=[])
+    log.append(entry)
+    save_json(TX_LOG_PATH, log)
 
 
 # ---------- FX rate helpers ----------
@@ -107,8 +114,10 @@ def get_rate(day_rates: dict, src: str, dst: str) -> float:
     if direct_key in derived:
         return derived[direct_key]
 
-    raise ValueError(f"No rate available for {src}->{dst}. "
-                     f"Check fx_data/fxrates.json pairs (need USD_AUD and/or EUR_AUD).")
+    raise ValueError(
+        f"No rate available for {src}->{dst}. "
+        f"Check fx_data/fxrates.json pairs (need USD_AUD and/or EUR_AUD)."
+    )
 
 
 # ---------- Carbon + Compliance ----------
@@ -191,9 +200,9 @@ def simulate(src: str, dst: str, amount: float):
     badge = carbon_badge(co2_kg)
     compliance = compliance_check(amount, src, dst)
 
-    # Append transaction
-    tx_log = load_json(TX_LOG_PATH, default=[])
+    # --- Build a persistent transaction entry (NEW) ---
     tx_entry = {
+        "tx_id": uuid.uuid4().hex,
         "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "fx_date_used": latest_date,
         "pair": pair_key,
@@ -216,11 +225,10 @@ def simulate(src: str, dst: str, amount: float):
         },
         "compliance": compliance
     }
-    tx_log.append(tx_entry)
 
     # Persist changes
     save_json(BALANCES_PATH, balances)
-    save_json(TX_LOG_PATH, tx_log)
+    append_tx_log(tx_entry)  # <— append to JSON log safely
 
     # ---- Output ----
     print("[FX Conversion Simulation]")
