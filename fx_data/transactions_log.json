@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "tx_id": "876be0f08d2843b39739329f9f71baa3",
+    "timestamp": "2025-08-25T09:28:08Z",
+    "fx_date_used": "2025-08-07",
+    "pair": "EUR_USD",
+    "rate": 1.073333,
+    "amount_src": 50.0,
+    "amount_dst": 53.67,
+    "balances_before": {
+      "USD": 100.0,
+      "EUR": 986.34,
+      "AUD": 2550.0
+    },
+    "balances_after": {
+      "USD": 153.67,
+      "EUR": 936.34,
+      "AUD": 2550.0
+    },
+    "carbon": {
+      "kg": 0.03,
+      "badge": "Low"
+    },
+    "compliance": "Clear"
+  }
+]
