@@ -800,6 +800,130 @@ One-liner:
   - Screenshots of CLI runs  
 - Prepare ground for **Sprint 3 (Compliance epic)** starting **Sep 1**.  
 
+---
 
+# 📅 25 August 2025 — Logbook (Sprint 2)
 
+**Focus:** Practice and validate the FX conversion simulator with carbon + compliance stubs.  
+**Repo path:** `~/Documents/GitHub/aiva-glow-wallet`
 
+---
+
+## ✅ What I did
+1. Ensured a transactions file exists (empty array if missing).
+   ```bash
+   [[ -f fx_data/transactions_sample.json ]] || echo "[]" > fx_data/transactions_sample.json
+   ```
+2. Ran the simulator with a few scenarios to learn balance checks, rate lookup, carbon estimate, and compliance flow.
+
+---
+
+## 🧪 Runs & Results
+
+### 1) Attempted: USD → AUD, 200  
+```bash
+python3 ai/fx_conversion_sim.py USD AUD 200
+```
+**Outcome:** ❌ `ValueError: Insufficient USD balance`  
+> Lesson: balance validation happens **before** compliance.
+
+---
+
+### 2) Successful small trade: EUR → USD, 50  
+```bash
+python3 ai/fx_conversion_sim.py EUR USD 50
+```
+
+**Expected-style output (abridged):**
+```
+[FX Conversion Simulation]
+Date used: 2025-08-07
+Rate EUR->USD: 1.073333
+Amount: 50.00 EUR  →  53.67 USD
+
+Before:
+  USD 100.00 | EUR 986.34 | AUD 2,550.00
+
+After:
+  USD 153.67 | EUR 936.34 | AUD 2,550.00
+
+Impact & Controls:
+  Carbon: 0.03 kg CO₂ (Low)  |  Compliance: Clear
+```
+
+---
+
+### 3) Compliance test (large trade): USD → AUD, 15,000  
+```bash
+python3 ai/fx_conversion_sim.py USD AUD 15000
+```
+- First try: ❌ Failed (insufficient USD balance).  
+- After topping up balances (or using a smaller amount): ✅ success and **Compliance: Review** triggered.
+
+**One‑liner style (example):**
+```
+USD->AUD @ 1.5000 | 15,000.00 USD → 22,500.00 AUD | CO₂ 6.30 kg CO₂ (High) | Review
+```
+
+> Note: Exact carbon value depends on your `fx_data/carbon_factors.json`.
+
+---
+
+## 📸 Key Outputs (recap)
+- **Small trade (EUR→USD 50)** → Carbon **0.03 kg (Low)**, Compliance **Clear**, balances updated correctly.  
+- **Large trade (USD→AUD 15,000)** → Carbon **High**, Compliance **Review** (after ensuring sufficient source funds).
+
+---
+
+## 🧯 Problems & Fixes
+
+| Problem                          | Cause                            | Fix (short)                                 |
+|----------------------------------|----------------------------------|---------------------------------------------|
+| Insufficient balance error       | Amount > available funds         | Top up `balances.json` or reduce amount     |
+| Compliance not triggered         | Amount below threshold           | Use higher amount (e.g., 15,000 USD)        |
+| Confused order of validations    | Expected compliance before funds | Remember: **Funds → Rate → Carbon → Compliance** |
+
+---
+
+## 🧠 Learnings
+- Validation order (very important):  
+  1. **Balance sufficiency**  
+  2. **FX rate calculation** (direct, inverse, AUD cross)  
+  3. **Carbon estimate** (factor per 1000 units)  
+  4. **Compliance** (simple threshold → `Clear` / `Review`)
+- Debugging approach:
+  - Read Python tracebacks (`ValueError`) carefully
+  - Start with small, controlled trades
+  - Adjust JSON data (`balances.json`, `carbon_factors.json`) when needed
+
+---
+
+## 🗂 Files touched today
+- `ai/fx_conversion_sim.py` (run + verify behavior)
+- `fx_data/balances.json` (adjust for tests)
+- `fx_data/transactions_sample.json` (append tx logs)
+- `fx_data/carbon_factors.json` (used in estimate)
+
+---
+
+## ✅ Commit for today
+
+**Commit message**
+```
+AIVA-15/S2: Exercise FX simulator with carbon & compliance cases
+```
+
+**Extended description**
+```
+- Ran fx_conversion_sim.py with small and large trades
+- Verified balance checks, rate lookup, carbon estimate, and compliance flow
+- Confirmed "Clear" for small trade and "Review" for high-value trade
+- Ensured transactions_sample.json appends correctly; balances.json updated
+```
+
+---
+
+## ⏭️ Next steps (Sprint 2 goals)
+- Add one screenshot to `/screenshots/` for each scenario (small trade, compliance review).
+- Link the simulator “one-liner” output into the **Smart FX** UI card mock (Lovable).
+- Prepare a tiny function to read the latest transaction from `transactions_sample.json` for UI.
