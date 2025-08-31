@@ -927,3 +927,105 @@ AIVA-15/S2: Exercise FX simulator with carbon & compliance cases
 - Add one screenshot to `/screenshots/` for each scenario (small trade, compliance review).
 - Link the simulator “one-liner” output into the **Smart FX** UI card mock (Lovable).
 - Prepare a tiny function to read the latest transaction from `transactions_sample.json` for UI.
+
+---
+
+## 31 August 2025  
+**Task ID:** AIVA-17, AIVA-18, AIVA-19 (Sprint 2 Wrap-up)  
+**Epic:** Documentation & GitHub / FX Data & API Layer  
+**Status:** ✅ Completed  
+
+---
+
+### 🎯 Objective  
+Finish Sprint 2 with a **working demo of FX conversion simulation** that:  
+- Updates balances from `balances.json`  
+- Uses latest FX rates (`fxrates.json`)  
+- Estimates carbon footprint per trade (`carbon_factors.json`)  
+- Runs a compliance stub for large trades  
+- Appends transactions into `transactions_sample.json`  
+
+---
+
+### 📝 Step-by-Step Process  
+
+1. **Balance Setup**  
+   - Initial error when running `USD→AUD 15000`:  
+     ```
+     ValueError: Insufficient USD balance. Have 5053.67, need 15000.0
+     ```  
+   - ✅ Fixed by resetting balances.json to:  
+     ```json
+     {"USD":20000,"EUR":1000,"AUD":1000}
+     ```  
+
+2. **Small Trade Test** (`EUR→USD 50`)  
+   - Output confirmed:  
+     ```
+     Before:  USD 100.00 | EUR 986.34 | AUD 2,550.00
+     After:   USD 153.67 | EUR 936.34 | AUD 2,550.00
+     Carbon:  0.03 kg CO₂ (Low) | Compliance: Clear
+     ```  
+   - Verified **FX rate lookup**, **balances update**, **carbon = Low**, and **compliance = Clear**.  
+
+3. **Large Trade Test** (`USD→AUD 15000`)  
+   - After fixing balances:  
+     ```
+     Before:  USD 20,000.00 | EUR 1,000.00 | AUD 1,000.00
+     After:   USD 5,000.00  | EUR 1,000.00 | AUD 23,500.00
+     Carbon:  6.30 kg CO₂ (High) | Compliance: Review
+     ```  
+   - ✅ Compliance correctly triggered for >10,000 USD.  
+   - ✅ Carbon footprint correctly classified as **High**.  
+
+4. **Transaction Logging**  
+   - Each trade appended to `fx_data/transactions_sample.json` with:  
+     - Timestamp  
+     - Pair, rate, amount  
+     - Before/After balances  
+     - Carbon + Compliance results  
+
+---
+
+### 📸 Key Outputs  
+
+#### ✅ Successful Small Trade (EUR→USD 50)  
+- Carbon footprint: `0.03 kg CO₂ (Low)`  
+- Compliance: `Clear`  
+
+#### ✅ Successful Large Trade (USD→AUD 15000)  
+- Carbon footprint: `6.3 kg CO₂ (High)`  
+- Compliance: `Review`  
+
+---
+
+### 🚩 Problems & Fixes  
+
+| Problem                         | Cause                           | Solution                                      |
+|---------------------------------|---------------------------------|-----------------------------------------------|
+| Insufficient balance error       | Tried to trade more than wallet | Reset or topped up `balances.json`            |
+| Compliance not triggered         | Trade was too small             | Tested with 15,000 USD, crossed threshold     |
+| Confusion: balance vs compliance | Script enforces balances first  | Learned order: Balance → FX → Carbon → Comp.  |
+
+---
+
+### 📚 Learnings  
+- **Order of execution matters**:  
+  1. Balance sufficiency check  
+  2. FX rate calculation  
+  3. Carbon estimation  
+  4. Compliance review  
+
+- Debugging was systematic:  
+  - Read `ValueError` tracebacks  
+  - Tested smaller trades first  
+  - Adjusted `balances.json` when needed  
+
+- Adding **carbon + compliance layers** makes the wallet simulation feel closer to a real fintech engine.  
+
+---
+
+### ✅ Outcome  
+- Sprint 2 deliverables finished.  
+- **FX Conversion Simulator** working with balances, carbon tags, compliance stub, and transaction logging.  
+- Ready to move into **Sprint 3 (Compliance Epic, Sep 1)**.  
