@@ -118,5 +118,29 @@
       "badge": "High"
     },
     "compliance": "Review"
+  },
+  {
+    "tx_id": "acf39cc7291e451e93ecefe544203d4d",
+    "timestamp": "2025-08-31T07:47:45Z",
+    "fx_date_used": "2025-08-07",
+    "pair": "EUR_USD",
+    "rate": 1.073333,
+    "amount_src": 50.0,
+    "amount_dst": 53.67,
+    "balances_before": {
+      "USD": 5000.0,
+      "EUR": 1000.0,
+      "AUD": 23500.0
+    },
+    "balances_after": {
+      "USD": 5053.67,
+      "EUR": 950.0,
+      "AUD": 23500.0
+    },
+    "carbon": {
+      "kg": 0.03,
+      "badge": "Low"
+    },
+    "compliance": "Clear"
   }
 ]
