@@ -18,29 +18,31 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ---
 
-## 🧱 Folder Structure (as of 25 Aug 2025)
+## 🧱 Folder Structure (as of 31 Aug 2025)
 
-├── ai/ # Smart FX engine & simulations  
-│   ├── fx_trend_analysis.py  
-│   ├── fx_trend_with_threshold.py  
-│   ├── fx_conversion_sim.py # mock balance FX simulation with carbon & compliance  
-│   └── carbon_estimator.py  
-│  
-├── fx_data/ # Mock FX, balances, transaction, and carbon data  
-│   ├── fxrates.json  
-│   ├── balances.json # starting USD/EUR/AUD balances  
-│   ├── transactions_sample.json  
-│   └── carbon_factors.json  
-│  
-├── lovable_ui/ # UI exported from Lovable (Markdown + assets)  
-│   ├── ai_suggestion_component.md  
-│   ├── compliance_collapsible_panel.md  
-│   └── Smart Fx.png  
-│  
-├── designs/ # UI concepts  
-├── screenshots/ # Output snapshots for tracking  
-├── logbook.md # Daily build journal  
-└── README.md # Project overview  
+```
+├── ai/ # Smart FX engine & simulations
+│   ├── fx_trend_analysis.py
+│   ├── fx_trend_with_threshold.py
+│   ├── fx_conversion_sim.py   # mock balance FX simulation with carbon & compliance
+│   └── carbon_estimator.py
+│
+├── fx_data/ # Mock FX, balances, transaction, and carbon data
+│   ├── fxrates.json
+│   ├── balances.json          # starting USD/EUR/AUD balances
+│   ├── transactions_sample.json
+│   └── carbon_factors.json
+│
+├── lovable_ui/ # UI exported from Lovable (Markdown + assets)
+│   ├── ai_suggestion_component.md
+│   ├── compliance_collapsible_panel.md
+│   └── Smart Fx.png
+│
+├── designs/ # UI concepts
+├── screenshots/ # Output snapshots for tracking
+├── logbook.md   # Daily build journal
+└── README.md    # Project overview
+```
 
 ---
 
@@ -62,22 +64,22 @@ Aiva is a build + learn journey to explore how the future of finance is being sh
 
 ---
 
-## 📊 Sprint 2 Progress (15–29 Aug, status on 25 Aug 2025)
+## 📊 Sprint 2 Summary (15–31 Aug 2025)
 
-| Task ID  | Title                                      | Status        |
-|----------|--------------------------------------------|---------------|
-| AIVA-17  | Create GitHub repo aiva-wallet             | 🔄 In Progress |
-| AIVA-18  | Write README.md with vision and stack      | 🔄 In Progress |
-| AIVA-19  | Add mockdata and ai folders in GitHub      | 🔄 In Progress |
+| Task ID  | Title                                        | Status   |
+|----------|----------------------------------------------|----------|
+| AIVA-17  | Create GitHub repo aiva-wallet               | ✅ Done |
+| AIVA-18  | Write README.md with vision and stack        | ✅ Done |
+| AIVA-19  | Add mockdata and ai folders in GitHub        | ✅ Done |
 
-**Health:** Sprint 2 is **on track**.  
-- Repo + README nearly ready to close.  
-- Simulation (`fx_conversion_sim.py`) enhanced with carbon footprint + compliance layers.  
-- Tested both small and large trades:  
-  - Small trades update balances, carbon = Low, compliance = Clear.  
-  - Large trades trigger compliance = Review.  
-
-All deliverables can be finished by end of August.
+**Health:** Sprint 2 **completed successfully**.  
+- Repo + README finalized.  
+- `fx_conversion_sim.py` enhanced with:  
+  - ✅ Carbon footprint estimation  
+  - ✅ Compliance stub  
+  - ✅ Transaction logging  
+- CLI runs tested with both **small** and **large** trades.  
+- All deliverables closed on **31 Aug 2025**.  
 
 ---
 
@@ -96,41 +98,45 @@ All deliverables can be finished by end of August.
 ### 2. Smart FX AI Engine (`/ai`)
 - `fx_trend_analysis.py` — detects rising/falling trends from mock data.  
 - `fx_trend_with_threshold.py` — adds % change calculation & threshold-based “Convert Now” / “Wait” decisions.  
-- `fx_conversion_sim.py` — updated to log transactions, enforce compliance checks, estimate carbon, and persist balances.  
-- `carbon_estimator.py` — estimates kg CO₂ per transaction using mock factors and assigns Low/Medium/High badge.  
-
-> **Status:** Integrated with UI mockups in Lovable and persistent mock data store.  
+- `fx_conversion_sim.py` — updated to:  
+  - Enforce balance sufficiency  
+  - Apply FX conversion & persist balances  
+  - Estimate carbon footprint (Low/Medium/High)  
+  - Run compliance stub (flag “Review” > 10,000)  
+  - Append structured logs into `transactions_sample.json`  
+- `carbon_estimator.py` — estimates kg CO₂ per transaction using mock factors.  
 
 ---
 
 ### 3. FX Data Store (`/fx_data`)
 - `fxrates.json` — 7-day FX rates  
 - `balances.json` — starting mock balances (USD, EUR, AUD)  
-- `transactions_sample.json` — mock transaction history (now appends trades with carbon + compliance logs)  
+- `transactions_sample.json` — growing transaction log (with carbon + compliance)  
 - `carbon_factors.json` — mock carbon intensity per currency pair  
 
 ---
 
 ### 4. Screenshots & Logs
-- CLI run outputs for small and large trades saved in `/screenshots`  
-- Daily journal tracked in `/logbook.md`  
+- CLI run outputs for:  
+  - ✅ Small Trade (EUR→USD 50) → `Low` carbon, compliance `Clear`  
+  - ✅ Large Trade (USD→AUD 15000) → `High` carbon, compliance `Review`  
+- Daily journal tracked in `logbook.md`  
 
 ---
 
 ### 5. Compliance & Risk Engine (Epic)
 - Collapsible UI panel for compliance/risk checks in Lovable  
 - KYC/AML snapshot, transaction risk classification, required actions  
-- Carbon + compliance integrated into CLI simulation  
-- Placeholder for Australian Privacy Principles (APPs) compliance and AI ethics safeguards  
+- **Carbon + compliance fully integrated** into CLI simulation  
+- Placeholder for APPs compliance and AI ethics safeguards  
 
 ---
 
 ## 🧭 What’s Next
-- [ ] Finalize Sprint 2 by committing:  
-  - Updated `README.md`  
-  - Updated folder structure (`ai/`, `fx_data/`)  
-  - Screenshots of CLI runs  
-- [ ] Prepare ground for Sprint 3 (Compliance Epic) starting Sep 1  
+- [ ] Start Sprint 3 (1–15 Sep): Compliance Epic  
+  - Extend compliance stub with more rules (velocity, sanctions, PEP checks)  
+  - Add collapsible alerts in Lovable linked to real JSON rules  
+  - Explore simple integration with real-time FX API (mock > live transition)  
 
 ---
 
