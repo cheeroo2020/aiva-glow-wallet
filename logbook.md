@@ -1029,3 +1029,67 @@ Finish Sprint 2 with a **working demo of FX conversion simulation** that:
 - Sprint 2 deliverables finished.  
 - **FX Conversion Simulator** working with balances, carbon tags, compliance stub, and transaction logging.  
 - Ready to move into **Sprint 3 (Compliance Epic, Sep 1)**.  
+
+---
+
+## 📅 2 September 2025  
+**Focus:** Mapping Global Licensing Insights into Sprint Structure  
+**Context:** Lessons from Airwallex global licensing snapshot applied to Aiva Epics  
+
+---
+
+### 🔗 Mapping Regulatory Learnings to Aiva Sprint Structure  
+
+#### 1. Compliance & Risk Epic  
+- **Insight:** Each region (AUSTRAC, FinCEN, FCA, EBA) mandates AML/CTF checks, reporting, and transaction monitoring.  
+- **Sprint Link:**  
+  - **AIVA-46 (KYC/AML onboarding flow):** Simulate AUSTRAC/FinCEN KYC tiers (basic vs enhanced).  
+  - **AIVA-47 (Compliance checklist):** Align with PSD2 obligations (EU) vs MSB obligations (US).  
+  - **AIVA-48 (Audit trail):** Logs must satisfy potential regulator reviews (AUSTRAC/FinCEN examiners).  
+
+---
+
+#### 2. FX Data & API Layer  
+- **Insight:** Regulators separate processors (no wallet balances) vs transmitters (holding balances). Licensing depends on handling customer funds.  
+- **Sprint Link:**  
+  - **AIVA-19 (Mockdata & AI folders):** Extend mock FX data with jurisdiction tags.  
+  - **AIVA-15 (Conversion simulation):** Add “jurisdiction” metadata to each simulated transaction.  
+  - **Future:** Wrap all FX API calls with compliance hooks for reporting.  
+
+---
+
+#### 3. Wallet UI  
+- **Insight:** Consumer protection varies (FCA e-money safeguarding vs ASIC AFSL disclosure).  
+- **Sprint Link:**  
+  - **AIVA-4/5/6 (UI tasks):** Display disclosure banners (“Demo only, not licensed provider”).  
+  - **Future:** Toggle UI between ASIC vs FCA reporting mockups.  
+
+---
+
+#### 4. Documentation & GitHub  
+- **Insight:** Regulators expect policies and privacy compliance docs in addition to technical systems.  
+- **Sprint Link:**  
+  - **AIVA-18 (README.md):** Add a “Licensing Snapshot” section documenting obligations.  
+  - **AIVA-49 (Data policy to APPs):** Map directly to Australian Privacy Principles (APPs).  
+
+---
+
+#### 5. Demo & Launch  
+- **Insight:** Firms expand region by region — not everywhere at once.  
+- **Sprint Link:**  
+  - **AIVA-21 (Milestone dates):** Simulate a staged rollout (AU → UK → US).  
+  - **AIVA-22 (Pitch deck):** Show compliance maturity as part of expansion plan.  
+
+---
+
+### ✅ Learnings  
+- Regulation is part of the product, not an afterthought.  
+- Compliance epics map neatly to global case studies (Airwallex, Wise, Stripe).  
+- For Aiva, even as a prototype, adding “jurisdiction-aware” tags makes the simulation closer to a real-world wallet.  
+
+---
+
+### 📌 Next Steps  
+- Add “Licensing Insights Layer” to **logbook.md** to guide Sprint 3 (Compliance Epic).  
+- Update README to include a **Licensing Snapshot section**.  
+- Begin Sprint 3 with AUSTRAC-inspired KYC/AML onboarding simulation.  
