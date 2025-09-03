@@ -3,7 +3,6 @@
 - AML/CTF Program Outline
 - AFSL Applicability
 
-
 # Privacy & Compliance Study Notes
 
 ## 1. Reporting Entity Status (AUSTRAC)
