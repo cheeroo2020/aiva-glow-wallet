@@ -119,3 +119,18 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* 3D Transform Utilities */
+@layer utilities {
+  .transform-gpu {
+    transform-style: preserve-3d;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}

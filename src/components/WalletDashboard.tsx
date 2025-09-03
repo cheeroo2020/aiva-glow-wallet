@@ -12,6 +12,7 @@ const WalletDashboard = () => {
   const [convertAmount, setConvertAmount] = useState("100");
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EUR");
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Simulate flagged transactions on component mount
@@ -157,6 +158,18 @@ const WalletDashboard = () => {
     }
   };
 
+  const getTransactionsForCurrency = (currency: string) => {
+    return transactionHistory
+      .filter(tx => tx.from === currency || tx.to === currency)
+      .slice(0, 3);
+  };
+
+  const getCurrencyTotalCarbon = (currency: string) => {
+    const transactions = getTransactionsForCurrency(currency);
+    const totalKg = transactions.reduce((sum, tx) => sum + estimateCarbonFootprint(tx), 0);
+    return Math.round(totalKg * 1000) / 1000;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6 lg:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -168,27 +181,109 @@ const WalletDashboard = () => {
           <p className="text-gray-600">Manage your multi-currency wallet</p>
         </div>
 
-        {/* Balance Cards */}
+        {/* Interactive Balance Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {Object.entries(walletBalances).map(([currency, amount]) => (
-            <Card key={currency} className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                      {getCurrencyIcon(currency)}
+          {Object.entries(walletBalances).map(([currency, amount]) => {
+            const isExpanded = expandedCard === currency;
+            const currencyTransactions = getTransactionsForCurrency(currency);
+            const totalCarbon = getCurrencyTotalCarbon(currency);
+            const carbonBand = getCarbonBand(totalCarbon);
+            
+            return (
+              <Card 
+                key={currency} 
+                className={`group relative overflow-hidden bg-gradient-card border-0 shadow-card rounded-2xl cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-glow ${
+                  isExpanded ? 'scale-105 shadow-glow' : ''
+                }`}
+                onClick={() => setExpandedCard(isExpanded ? null : currency)}
+              >
+                <CardContent className="p-0">
+                  <div className={`transition-all duration-700 transform-gpu ${
+                    isExpanded ? 'rotate-y-180' : ''
+                  }`}>
+                    {/* Front Side - Balance Display */}
+                    <div className={`p-6 ${isExpanded ? 'opacity-0 absolute inset-0' : 'opacity-100'} transition-opacity duration-300`}>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
+                            {getCurrencyIcon(currency)}
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground font-medium">{currency}</div>
+                            <div className="text-2xl font-bold text-foreground">
+                              {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronDownIcon className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${
+                          isExpanded ? 'rotate-180' : ''
+                        }`} />
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">Available Balance</span>
+                        <Badge className="bg-teal/10 text-teal border-teal/20">
+                          {totalCarbon} kg CO₂
+                        </Badge>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-sm text-gray-500 font-medium">{currency}</div>
-                      <div className="text-xl font-semibold text-gray-900">
-                        {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+
+                    {/* Back Side - Detailed Info */}
+                    <div className={`p-6 space-y-4 ${isExpanded ? 'opacity-100' : 'opacity-0 absolute inset-0'} transition-opacity duration-300 delay-300`}>
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-foreground">{currency} Details</h4>
+                        <Badge className={`${
+                          carbonBand === 'Low' ? 'bg-success/10 text-success border-success/20' : 
+                          carbonBand === 'Medium' ? 'bg-warning/10 text-warning border-warning/20' : 
+                          'bg-destructive/10 text-destructive border-destructive/20'
+                        }`}>
+                          {carbonBand} Impact
+                        </Badge>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Balance:</span>
+                          <span className="font-semibold text-foreground">
+                            {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Carbon Total:</span>
+                          <span className="font-medium text-teal">{totalCarbon} kg CO₂</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recent Transactions</h5>
+                        {currencyTransactions.length === 0 ? (
+                          <p className="text-xs text-muted-foreground italic">No recent transactions</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {currencyTransactions.map((tx) => (
+                              <div key={tx.id} className="flex items-center justify-between p-2 bg-muted/30 rounded-lg">
+                                <div className="flex items-center space-x-2">
+                                  <div className="text-xs">
+                                    <span className="font-medium text-foreground">
+                                      {tx.from === currency ? '-' : '+'}{getCurrencySymbol(tx.from === currency ? tx.to : tx.from)}
+                                      {tx.from === currency ? tx.fromAmount : tx.toAmount}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  {getComplianceBadge(tx.compliance)}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* Smart FX Recommendations */}
