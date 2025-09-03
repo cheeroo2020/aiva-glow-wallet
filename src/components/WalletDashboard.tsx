@@ -4,13 +4,42 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ArrowRightIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon, SparklesIcon, TrendingUpIcon, ChevronDownIcon, ShieldCheckIcon, LeafIcon } from "lucide-react";
-import { useState } from "react";
+import { ArrowRightIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon, SparklesIcon, TrendingUpIcon, ChevronDownIcon, ShieldCheckIcon, LeafIcon, AlertTriangleIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const WalletDashboard = () => {
   const [convertAmount, setConvertAmount] = useState("100");
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EUR");
+  const { toast } = useToast();
+
+  // Simulate flagged transactions on component mount
+  useEffect(() => {
+    // Simulate flagged transactions after a short delay
+    const timer = setTimeout(() => {
+      // Check for any review or blocked transactions and show toasts
+      transactionHistory.forEach((tx) => {
+        if (tx.compliance === "Review") {
+          toast({
+            title: "Transaction Flagged",
+            description: "Transaction flagged for review (high velocity)",
+            variant: "default",
+            className: "bg-warning text-warning-foreground border-warning/20",
+          });
+        } else if (tx.compliance === "Blocked") {
+          toast({
+            title: "Transaction Blocked",
+            description: "Transaction blocked (sanctioned recipient)",
+            variant: "destructive",
+            className: "bg-destructive text-destructive-foreground border-destructive/20",
+          });
+        }
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   // Carbon footprint estimation
   const estimateCarbonFootprint = (transaction: any) => {
@@ -104,6 +133,27 @@ const WalletDashboard = () => {
       case 'EUR': return '€';
       case 'AUD': return 'A$';
       default: return '$';
+    }
+  };
+
+  const handleConvert = () => {
+    // Simulate transaction processing with potential flagging
+    const simulatedCompliance = Math.random() > 0.7 ? (Math.random() > 0.5 ? "Review" : "Blocked") : "Clear";
+    
+    if (simulatedCompliance === "Review") {
+      toast({
+        title: "Transaction Flagged",
+        description: "Transaction flagged for review (high velocity)",
+        variant: "default",
+        className: "bg-warning text-warning-foreground border-warning/20",
+      });
+    } else if (simulatedCompliance === "Blocked") {
+      toast({
+        title: "Transaction Blocked", 
+        description: "Transaction blocked (sanctioned recipient)",
+        variant: "destructive",
+        className: "bg-destructive text-destructive-foreground border-destructive/20",
+      });
     }
   };
 
@@ -215,7 +265,10 @@ const WalletDashboard = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium">
+              <Button 
+                className="h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                onClick={handleConvert}
+              >
                 <RefreshCwIcon className="h-4 w-4 mr-2" />
                 Convert
               </Button>
