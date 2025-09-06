@@ -1093,3 +1093,30 @@ Finish Sprint 2 with a **working demo of FX conversion simulation** that:
 - Add “Licensing Insights Layer” to **logbook.md** to guide Sprint 3 (Compliance Epic).  
 - Update README to include a **Licensing Snapshot section**.  
 - Begin Sprint 3 with AUSTRAC-inspired KYC/AML onboarding simulation.  
+
+---
+
+**Date:** Saturday, 06 September 2025
+
+---
+
+### Branch Setup
+Created and switched to new branch `sprint3/compliance` in GitHub website. Verified sync with GitHub Desktop and confirmed branch alignment.
+
+### Audit Log
+Scaffolded `fx_data/audit_log.json` for compliance event tracking. Prepared structure for recording blocked/reviewed/cleared transactions.
+
+### Compliance Logic
+Upgraded `ai/fx_conversion_sim.py` with compliance rules: amount thresholds, velocity checks (structuring), and sanctions mock. Added full compliance object (`status`, `reason`, `rules_triggered`).
+
+### Audit Integration
+Implemented `append_audit` to record structured audit events into `audit_log.json`.
+
+### UI Work (Lovable)
+Prepared a single comprehensive Lovable prompt to modernize wallet UI: dark mode toggle, collapsible compliance panel, transaction timeline, AI insight card, and improved balance cards.
+
+### Sync & Confirmation
+Confirmed branch state in GitHub Desktop and verified no local changes pending. Repository is aligned with remote `sprint3/compliance`.
+
+### Next Steps
+Tomorrow: extend compliance UI in Lovable, finalize Sprint 3 commits, and begin planning for Sprint 4 API layer.
