@@ -1,553 +1,554 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ArrowRightIcon, DollarSignIcon, EuroIcon, CurrencyIcon, RefreshCwIcon, SparklesIcon, TrendingUpIcon, ChevronDownIcon, ShieldCheckIcon, LeafIcon, AlertTriangleIcon } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { 
+  DollarSign, 
+  Euro, 
+  Banknote,
+  TrendingUp,
+  TrendingDown,
+  Leaf,
+  Shield,
+  AlertTriangle,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Bot,
+  Sun,
+  Moon,
+  User,
+  Bell,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Filter,
+  Search,
+  Download,
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  Sparkles,
+  Activity
+} from 'lucide-react';
+
+// Types
+interface Balance {
+  USD: number;
+  EUR: number;
+  AUD: number;
+}
+
+interface Transaction {
+  tx_id: string;
+  timestamp: string;
+  pair: string;
+  rate: number;
+  amount_src: number;
+  amount_dst: number;
+  balances_before: Balance;
+  balances_after: Balance;
+  carbon: {
+    kg: number;
+    badge: string;
+  };
+  compliance: string;
+}
+
+// Mock data (fallback)
+const mockBalances: Balance = {
+  USD: 5000.0,
+  EUR: 1000,
+  AUD: 23500.0
+};
 
 const WalletDashboard = () => {
-  const [convertAmount, setConvertAmount] = useState("100");
-  const [fromCurrency, setFromCurrency] = useState("USD");
-  const [toCurrency, setToCurrency] = useState("EUR");
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+  
+  const [balances, setBalances] = useState<Balance>(mockBalances);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [expandedTransaction, setExpandedTransaction] = useState<string | null>(null);
+  const [complianceExpanded, setComplianceExpanded] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const { toast } = useToast();
 
-  // Simulate flagged transactions on component mount
+  // Theme toggle
   useEffect(() => {
-    // Simulate flagged transactions after a short delay
-    const timer = setTimeout(() => {
-      // Check for any review or blocked transactions and show toasts
-      transactionHistory.forEach((tx) => {
-        if (tx.compliance === "Review") {
-          toast({
-            title: "Transaction Flagged",
-            description: "Transaction flagged for review (high velocity)",
-            variant: "default",
-            className: "bg-warning text-warning-foreground border-warning/20",
-          });
-        } else if (tx.compliance === "Blocked") {
-          toast({
-            title: "Transaction Blocked",
-            description: "Transaction blocked (sanctioned recipient)",
-            variant: "destructive",
-            className: "bg-destructive text-destructive-foreground border-destructive/20",
-          });
-        }
-      });
-    }, 2000);
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
-    return () => clearTimeout(timer);
-  }, [toast]);
+  // Load data
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  // Carbon footprint estimation
-  const estimateCarbonFootprint = (transaction: any) => {
-    const baseAmount = parseFloat(transaction.fromAmount);
-    const methodFactor = 0.05; // Default factor for fx transactions
-    const fxBonus = (baseAmount / 100.0) * 0.02; // Small bonus based on amount
-    const totalKg = methodFactor + fxBonus;
-    return Math.round(totalKg * 1000) / 1000; // Round to 3 decimal places
-  };
+  const loadData = async () => {
+    try {
+      // Load balances
+      const balanceResponse = await fetch('/fx_data/balances.json');
+      if (balanceResponse.ok) {
+        const balanceData = await balanceResponse.json();
+        setBalances(balanceData);
+      }
 
-  const getCarbonBand = (kg: number) => {
-    if (kg < 0.05) return "Low";
-    if (kg < 0.15) return "Medium";
-    return "High";
-  };
-
-  const walletBalances = {
-    AUD: 550.00,
-    USD: 1000.00,
-    EUR: 700.00
-  };
-
-  const exchangeRates = {
-    "USD-EUR": 0.9142,
-    "USD-AUD": 1.4821,
-    "EUR-USD": 1.0938,
-    "EUR-AUD": 1.6201,
-    "AUD-USD": 0.6747,
-    "AUD-EUR": 0.6172
-  };
-
-  const transactionHistory = [
-    { id: 1, from: "USD", to: "EUR", fromAmount: "100.00", toAmount: "91.42", date: "2024-07-31", status: "completed", compliance: "Clear" },
-    { id: 2, from: "AUD", to: "USD", fromAmount: "101.15", toAmount: "68.21", date: "2024-07-30", status: "completed", compliance: "Review" },
-    { id: 3, from: "EUR", to: "AUD", fromAmount: "100.00", toAmount: "162.01", date: "2024-07-29", status: "pending", compliance: "Clear" },
-    { id: 4, from: "USD", to: "AUD", fromAmount: "200.00", toAmount: "296.42", date: "2024-07-28", status: "completed", compliance: "Blocked" },
-    { id: 5, from: "EUR", to: "USD", fromAmount: "150.00", toAmount: "164.07", date: "2024-07-27", status: "failed", compliance: "Review" },
-  ];
-
-  const getConvertedAmount = () => {
-    const rate = exchangeRates[`${fromCurrency}-${toCurrency}`] || 1;
-    return (parseFloat(convertAmount) * rate).toFixed(2);
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <Badge className="bg-success text-success-foreground hover:bg-success/90">Completed</Badge>;
-      case 'pending':
-        return <Badge className="bg-warning text-warning-foreground hover:bg-warning/90">Pending</Badge>;
-      case 'failed':
-        return <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Failed</Badge>;
-      default:
-        return <Badge variant="secondary">Unknown</Badge>;
+      // Load transactions
+      const txResponse = await fetch('/fx_data/transactions_log.json');
+      if (txResponse.ok) {
+        const txData = await txResponse.json();
+        setTransactions(txData);
+        
+        // Show toast for flagged transactions
+        const flaggedTx = txData.filter((tx: Transaction) => tx.compliance !== 'Clear');
+        flaggedTx.forEach((tx: Transaction) => {
+          if (tx.compliance === 'Review') {
+            toast({
+              title: "Transaction flagged for review",
+              description: "High velocity or threshold exceeded",
+              variant: "default",
+              className: "bg-warning text-warning-foreground border-warning/20",
+            });
+          } else if (tx.compliance === 'Blocked') {
+            toast({
+              title: "Transaction blocked",
+              description: "Policy rules violation",
+              variant: "destructive",
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
     }
   };
 
-  const getComplianceBadge = (compliance: string) => {
-    switch (compliance) {
-      case 'Clear':
-        return <Badge className="bg-success text-success-foreground hover:bg-success/90">Clear</Badge>;
-      case 'Review':
-        return <Badge className="bg-warning text-warning-foreground hover:bg-warning/90">Review</Badge>;
-      case 'Blocked':
-        return <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Blocked</Badge>;
-      default:
-        return <Badge variant="secondary">Unknown</Badge>;
-    }
-  };
+  // Calculate KPIs
+  const totalBalanceAUD = Object.entries(balances).reduce((total, [currency, amount]) => {
+    // Simple conversion rates for demo
+    const rates = { USD: 1.5, EUR: 1.6, AUD: 1 };
+    return total + (amount * (rates[currency as keyof typeof rates] || 1));
+  }, 0);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric'
-    });
-  };
+  const recentTransactions = transactions.slice(-7);
+  const monthlyCarbon = transactions
+    .filter(tx => new Date(tx.timestamp).getMonth() === new Date().getMonth())
+    .reduce((sum, tx) => sum + tx.carbon.kg, 0);
 
+  // Currency icons
   const getCurrencyIcon = (currency: string) => {
     switch (currency) {
-      case 'USD': return <DollarSignIcon className="h-4 w-4" />;
-      case 'EUR': return <EuroIcon className="h-4 w-4" />;
-      case 'AUD': return <CurrencyIcon className="h-4 w-4" />;
-      default: return <DollarSignIcon className="h-4 w-4" />;
+      case 'USD': return <DollarSign className="h-6 w-6" />;
+      case 'EUR': return <Euro className="h-6 w-6" />;
+      case 'AUD': return <Banknote className="h-6 w-6" />;
+      default: return <DollarSign className="h-6 w-6" />;
     }
   };
 
-  const getCurrencySymbol = (currency: string) => {
-    switch (currency) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'AUD': return 'A$';
-      default: return '$';
+  // Status icons
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Clear': return <CheckCircle className="h-4 w-4 text-success" />;
+      case 'Review': return <AlertCircle className="h-4 w-4 text-warning" />;
+      case 'Blocked': return <XCircle className="h-4 w-4 text-destructive" />;
+      default: return <CheckCircle className="h-4 w-4 text-success" />;
     }
   };
 
-  const handleConvert = () => {
-    // Simulate transaction processing with potential flagging
-    const simulatedCompliance = Math.random() > 0.7 ? (Math.random() > 0.5 ? "Review" : "Blocked") : "Clear";
-    
-    if (simulatedCompliance === "Review") {
-      toast({
-        title: "Transaction Flagged",
-        description: "Transaction flagged for review (high velocity)",
-        variant: "default",
-        className: "bg-warning text-warning-foreground border-warning/20",
-      });
-    } else if (simulatedCompliance === "Blocked") {
-      toast({
-        title: "Transaction Blocked", 
-        description: "Transaction blocked (sanctioned recipient)",
-        variant: "destructive",
-        className: "bg-destructive text-destructive-foreground border-destructive/20",
-      });
-    }
-  };
+  // Filter transactions
+  const filteredTransactions = transactions.filter(tx => {
+    const matchesFilter = filterStatus === 'All' || tx.compliance === filterStatus;
+    const matchesSearch = tx.pair.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
-  const getTransactionsForCurrency = (currency: string) => {
-    return transactionHistory
-      .filter(tx => tx.from === currency || tx.to === currency)
-      .slice(0, 3);
-  };
-
-  const getCurrencyTotalCarbon = (currency: string) => {
-    const transactions = getTransactionsForCurrency(currency);
-    const totalKg = transactions.reduce((sum, tx) => sum + estimateCarbonFootprint(tx), 0);
-    return Math.round(totalKg * 1000) / 1000;
+  // Get currency transactions for balance card
+  const getCurrencyTransactions = (currency: string) => {
+    return transactions
+      .filter(tx => tx.pair.includes(currency))
+      .slice(-3);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 lg:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900">
-            Welcome to Aiva
-          </h1>
-          <p className="text-gray-600">Manage your multi-currency wallet</p>
-        </div>
-
-        {/* Interactive Balance Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {Object.entries(walletBalances).map(([currency, amount]) => {
-            const isExpanded = expandedCard === currency;
-            const currencyTransactions = getTransactionsForCurrency(currency);
-            const totalCarbon = getCurrencyTotalCarbon(currency);
-            const carbonBand = getCarbonBand(totalCarbon);
+    <div className="min-h-screen bg-background theme-transition">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                  <Sparkles className="h-5 w-5 text-white" />
+                </div>
+                <h1 className="text-xl font-bold">Aiva</h1>
+              </div>
+              <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse"></div>
+                <span>API connected</span>
+              </div>
+            </div>
             
-            return (
-              <Card 
-                key={currency} 
-                className={`group relative overflow-hidden bg-gradient-card border-0 shadow-card rounded-2xl cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-glow ${
-                  isExpanded ? 'scale-105 shadow-glow' : ''
-                }`}
-                onClick={() => setExpandedCard(isExpanded ? null : currency)}
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="theme-transition"
               >
-                <CardContent className="p-0">
-                  <div className={`transition-all duration-700 transform-gpu ${
-                    isExpanded ? 'rotate-y-180' : ''
-                  }`}>
-                    {/* Front Side - Balance Display */}
-                    <div className={`p-6 ${isExpanded ? 'opacity-0 absolute inset-0' : 'opacity-100'} transition-opacity duration-300`}>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                            {getCurrencyIcon(currency)}
-                          </div>
-                          <div>
-                            <div className="text-sm text-muted-foreground font-medium">{currency}</div>
-                            <div className="text-2xl font-bold text-foreground">
-                              {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                            </div>
-                          </div>
-                        </div>
-                        <ChevronDownIcon className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${
-                          isExpanded ? 'rotate-180' : ''
-                        }`} />
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Available Balance</span>
-                        <Badge className="bg-teal/10 text-teal border-teal/20">
-                          {totalCarbon} kg CO₂
-                        </Badge>
-                      </div>
-                    </div>
+                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <User className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-                    {/* Back Side - Detailed Info */}
-                    <div className={`p-6 space-y-4 ${isExpanded ? 'opacity-100' : 'opacity-0 absolute inset-0'} transition-opacity duration-300 delay-300`}>
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-foreground">{currency} Details</h4>
-                        <Badge className={`${
-                          carbonBand === 'Low' ? 'bg-success/10 text-success border-success/20' : 
-                          carbonBand === 'Medium' ? 'bg-warning/10 text-warning border-warning/20' : 
-                          'bg-destructive/10 text-destructive border-destructive/20'
-                        }`}>
-                          {carbonBand} Impact
-                        </Badge>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Balance:</span>
-                          <span className="font-semibold text-foreground">
-                            {getCurrencySymbol(currency)}{amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Carbon Total:</span>
-                          <span className="font-medium text-teal">{totalCarbon} kg CO₂</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recent Transactions</h5>
-                        {currencyTransactions.length === 0 ? (
-                          <p className="text-xs text-muted-foreground italic">No recent transactions</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {currencyTransactions.map((tx) => (
-                              <div key={tx.id} className="flex items-center justify-between p-2 bg-muted/30 rounded-lg">
-                                <div className="flex items-center space-x-2">
-                                  <div className="text-xs">
-                                    <span className="font-medium text-foreground">
-                                      {tx.from === currency ? '-' : '+'}{getCurrencySymbol(tx.from === currency ? tx.to : tx.from)}
-                                      {tx.from === currency ? tx.fromAmount : tx.toAmount}
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-1">
-                                  {getComplianceBadge(tx.compliance)}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+      <div className="container mx-auto px-6 py-8 space-y-8">
+        {/* Hero Section */}
+        <div className="text-center space-y-4">
+          <div className="space-y-2">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Welcome to Aiva
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Manage your multi-currency wallet with intelligence
+            </p>
+          </div>
+          
+          {/* KPI Strip */}
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                ${totalBalanceAUD.toLocaleString()}
+              </div>
+              <div className="text-sm text-muted-foreground">Total Balance (AUD)</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-secondary">
+                {recentTransactions.length}
+              </div>
+              <div className="text-sm text-muted-foreground">7d Transactions</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-success">
+                {monthlyCarbon.toFixed(2)} kg
+              </div>
+              <div className="text-sm text-muted-foreground">CO₂ This Month</div>
+            </div>
+          </div>
         </div>
 
-        {/* Smart FX Recommendations */}
-        <Card className="bg-white border border-gray-200 shadow-sm rounded-xl">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
+        {/* Balance Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {Object.entries(balances).map(([currency, amount]) => (
+            <Card 
+              key={currency}
+              className="card-hover cursor-pointer rounded-2xl"
+              onClick={() => setExpandedCard(expandedCard === currency ? null : currency)}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      {getCurrencyIcon(currency)}
+                      <span className="font-semibold text-lg">{currency}</span>
+                    </div>
+                    <div className="text-3xl font-bold">
+                      {currency === 'USD' && '$'}
+                      {currency === 'EUR' && '€'}
+                      {currency === 'AUD' && 'A$'}
+                      {amount.toLocaleString()}
+                    </div>
+                    <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+                      <Leaf className="h-3 w-3 mr-1" />
+                      Low Carbon
+                    </Badge>
+                  </div>
+                  <ChevronDown className={`h-5 w-5 transition-transform ${expandedCard === currency ? 'rotate-180' : ''}`} />
+                </div>
+                
+                {expandedCard === currency && (
+                  <div className="mt-6 pt-6 border-t space-y-4 animate-fade-in">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm">Last 3 Transactions</h4>
+                      {getCurrencyTransactions(currency).map(tx => (
+                        <div key={tx.tx_id} className="flex justify-between items-center text-sm">
+                          <span className="text-muted-foreground">{tx.pair}</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-medium">
+                              {tx.pair.startsWith(currency) ? '-' : '+'}
+                              {(tx.pair.startsWith(currency) ? tx.amount_src : tx.amount_dst).toLocaleString()}
+                            </span>
+                            {getStatusIcon(tx.compliance)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button size="sm" className="flex-1">Convert</Button>
+                      <Button size="sm" variant="outline" className="flex-1">View All</Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Smart FX Recommendation */}
+        <Card className="rounded-2xl border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Bot className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="flex items-center space-x-2">
+                    <span>Smart FX Recommendation</span>
+                    <Badge variant="secondary" className="text-xs">Today</Badge>
+                  </CardTitle>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-card/50 rounded-xl p-4 border">
+              <p className="text-sm text-muted-foreground mb-2">AI Insight</p>
+              <p className="font-medium">
+                AUD is currently strong vs USD (+2.1%). Optimal time to convert based on 7-day trend analysis.
+              </p>
+            </div>
+            
+            {/* Mini Sparkline */}
+            <div className="flex items-center space-x-4">
               <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                    <SparklesIcon className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Smart FX Recommendation</h3>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs">Today</Badge>
+                <div className="h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg flex items-end space-x-1 p-2">
+                  {[0.65, 0.67, 0.66, 0.68, 0.69, 0.67, 0.71].map((value, i) => (
+                    <div
+                      key={i}
+                      className="bg-primary flex-1 rounded-sm opacity-70"
+                      style={{ height: `${value * 100}%` }}
+                    />
+                  ))}
                 </div>
-                
-                <div className="mb-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <TrendingUpIcon className="h-4 w-4 text-green-600" />
-                    <span className="text-sm font-medium text-gray-900">Convert AUD to USD</span>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    AUD is currently strong against USD with favorable rates. Market analysis suggests this is an optimal time to convert with potential 2.1% gain over typical rates.
-                  </p>
-                </div>
-                
-                <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
-                  Convert Now
+                <div className="text-xs text-muted-foreground mt-1">AUD/USD 7d trend</div>
+              </div>
+              <div className="space-y-2">
+                <Button className="w-full">Convert Now</Button>
+                <Button variant="outline" size="sm" className="w-full text-xs">
+                  Why? 
+                  <Activity className="h-3 w-3 ml-1" />
                 </Button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* FX Converter */}
-        <Card className="bg-white border border-gray-200 shadow-sm">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-medium text-gray-900">Currency Exchange</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Amount</label>
-                <Input
-                  type="number"
-                  value={convertAmount}
-                  onChange={(e) => setConvertAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                />
+        {/* Transaction Timeline */}
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="h-5 w-5" />
+                <span>Transaction Timeline</span>
+              </CardTitle>
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1">
+                  {['All', 'Clear', 'Review', 'Blocked'].map(status => (
+                    <Button
+                      key={status}
+                      variant={filterStatus === status ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setFilterStatus(status)}
+                      className="text-xs"
+                    >
+                      {status}
+                    </Button>
+                  ))}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Search pairs..."
+                    className="px-2 py-1 text-sm border rounded bg-background"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">From</label>
-                <Select value={fromCurrency} onValueChange={setFromCurrency}>
-                  <SelectTrigger className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USD">USD</SelectItem>
-                    <SelectItem value="EUR">EUR</SelectItem>
-                    <SelectItem value="AUD">AUD</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">To</label>
-                <Select value={toCurrency} onValueChange={setToCurrency}>
-                  <SelectTrigger className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="USD">USD</SelectItem>
-                    <SelectItem value="EUR">EUR</SelectItem>
-                    <SelectItem value="AUD">AUD</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button 
-                className="h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-                onClick={handleConvert}
-              >
-                <RefreshCwIcon className="h-4 w-4 mr-2" />
-                Convert
-              </Button>
             </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              {filteredTransactions.map((tx, index) => (
+                <div
+                  key={tx.tx_id}
+                  className="timeline-item rounded-xl p-4 border cursor-pointer"
+                  onClick={() => setExpandedTransaction(expandedTransaction === tx.tx_id ? null : tx.tx_id)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      {getStatusIcon(tx.compliance)}
+                      <div>
+                        <div className="font-medium">{tx.pair.replace('_', ' → ')}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {new Date(tx.timestamp).toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-medium">
+                          {tx.amount_src} → {tx.amount_dst}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Rate: {tx.rate}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge 
+                        variant="outline" 
+                        className={`${
+                          tx.carbon.badge === 'Low' ? 'bg-success/10 text-success border-success/20' :
+                          tx.carbon.badge === 'Medium' ? 'bg-warning/10 text-warning border-warning/20' :
+                          'bg-destructive/10 text-destructive border-destructive/20'
+                        }`}
+                      >
+                        {tx.carbon.kg} kg CO₂ · {tx.carbon.badge}
+                      </Badge>
+                      <ChevronDown className={`h-4 w-4 transition-transform ${expandedTransaction === tx.tx_id ? 'rotate-180' : ''}`} />
+                    </div>
+                  </div>
+                  
+                  {expandedTransaction === tx.tx_id && (
+                    <div className="mt-4 pt-4 border-t space-y-3 animate-fade-in">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Before:</span>
+                          <div className="font-mono text-xs">
+                            USD: {tx.balances_before.USD}, EUR: {tx.balances_before.EUR}, AUD: {tx.balances_before.AUD}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">After:</span>
+                          <div className="font-mono text-xs">
+                            USD: {tx.balances_after.USD}, EUR: {tx.balances_after.EUR}, AUD: {tx.balances_after.AUD}
+                          </div>
+                        </div>
+                      </div>
+                      {tx.compliance !== 'Clear' && (
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <div className="text-sm font-medium mb-1">Compliance Status: {tx.compliance}</div>
+                          <div className="text-xs text-muted-foreground">
+                            This transaction was flagged for manual review due to policy thresholds.
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-            {convertAmount && (
-              <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
-                <div className="text-center space-y-1">
-                  <div className="text-2xl font-semibold text-gray-900">
-                    {getCurrencySymbol(toCurrency)}{getConvertedAmount()}
+        {/* Collapsible Compliance & Carbon Panel */}
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <div 
+              className="flex items-center justify-between cursor-pointer"
+              onClick={() => setComplianceExpanded(!complianceExpanded)}
+            >
+              <CardTitle className="flex items-center space-x-2">
+                <Shield className="h-5 w-5" />
+                <span>Compliance & Carbon Information</span>
+              </CardTitle>
+              <ChevronDown className={`h-5 w-5 transition-transform ${complianceExpanded ? 'rotate-180' : ''}`} />
+            </div>
+          </CardHeader>
+          {complianceExpanded && (
+            <CardContent className="space-y-6 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Compliance Legend</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-sm">Clear - Transaction approved</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <AlertCircle className="h-4 w-4 text-warning" />
+                      <span className="text-sm">Review - Manual review required</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <XCircle className="h-4 w-4 text-destructive" />
+                      <span className="text-sm">Blocked - Policy violation</span>
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {convertAmount} {fromCurrency} = {getConvertedAmount()} {toCurrency}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Rate: 1 {fromCurrency} = {(exchangeRates[`${fromCurrency}-${toCurrency}`] || 1).toFixed(4)} {toCurrency}
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Carbon Impact Legend</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Low Impact</span>
+                      <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+                        &lt; 0.5 kg CO₂
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Medium Impact</span>
+                      <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">
+                        0.5 - 2.0 kg CO₂
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">High Impact</span>
+                      <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
+                        &gt; 2.0 kg CO₂
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Transaction History */}
-        <Card className="bg-white border border-gray-200 shadow-lg rounded-xl">
-          <CardHeader className="pb-6 border-b border-gray-100">
-            <CardTitle className="text-lg font-semibold text-gray-900">Recent Transactions</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-muted/30 border-b border-border">
-              <div className="col-span-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</div>
-              <div className="col-span-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Currency Pair</div>
-              <div className="col-span-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Amount</div>
-              <div className="col-span-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Compliance</div>
-              <div className="col-span-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</div>
-              <div className="col-span-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider"></div>
-            </div>
-            
-            {/* Table Rows */}
-            <div className="divide-y divide-border">
-              {transactionHistory.map((tx, index) => {
-                const carbonKg = estimateCarbonFootprint(tx);
-                const carbonBand = getCarbonBand(carbonKg);
-                const [isOpen, setIsOpen] = useState(false);
-                
-                return (
-                  <div key={tx.id}>
-                    {/* Main Transaction Row */}
-                    <div 
-                      className={`grid grid-cols-12 gap-4 px-6 py-4 hover:bg-primary/5 transition-all duration-200 ${
-                        index % 2 === 0 ? 'bg-card' : 'bg-muted/30'
-                      }`}
-                    >
-                      {/* Date Column */}
-                      <div className="col-span-2 flex flex-col">
-                        <span className="text-sm font-medium text-foreground">{formatDate(tx.date)}</span>
-                        <span className="text-xs text-muted-foreground">2024</span>
-                      </div>
-                      
-                      {/* Currency Pair Column */}
-                      <div className="col-span-3 flex items-center space-x-2">
-                        <div className="flex items-center space-x-1.5">
-                          <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-md text-xs font-semibold border border-primary/20">
-                            {tx.from}
-                          </span>
-                          <ArrowRightIcon className="h-3 w-3 text-muted-foreground" />
-                          <span className="px-2.5 py-1 bg-teal/10 text-teal rounded-md text-xs font-semibold border border-teal/20">
-                            {tx.to}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Amount Column */}
-                      <div className="col-span-2 flex flex-col">
-                        <span className="text-sm font-semibold text-foreground">
-                          {getCurrencySymbol(tx.to)}{tx.toAmount}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          from {getCurrencySymbol(tx.from)}{tx.fromAmount}
-                        </span>
-                      </div>
-                      
-                      {/* Compliance Column */}
-                      <div className="col-span-2 flex items-center">
-                        {getComplianceBadge(tx.compliance)}
-                      </div>
-
-                      {/* Status Column */}
-                      <div className="col-span-2 flex items-center">
-                        {getStatusBadge(tx.status)}
-                      </div>
-                      
-                      {/* Expand Button */}
-                      <div className="col-span-1 flex items-center justify-end">
-                        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-                          <CollapsibleTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                              <ChevronDownIcon className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                            </Button>
-                          </CollapsibleTrigger>
-                        </Collapsible>
-                      </div>
-                    </div>
-                    
-                    {/* Collapsible Content */}
-                    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-                      <CollapsibleContent className={`${
-                        index % 2 === 0 ? 'bg-card' : 'bg-muted/30'
-                      } border-t border-border/50`}>
-                        <div className="px-6 py-4 space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Compliance Card */}
-                            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-                              <div className="flex items-center space-x-2">
-                                <ShieldCheckIcon className="h-4 w-4 text-primary" />
-                                <h4 className="font-semibold text-foreground">Compliance Details</h4>
-                              </div>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Status:</span>
-                                  <span className="font-medium">{getComplianceBadge(tx.compliance)}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">KYC/AML:</span>
-                                  <span className="text-success font-medium">Verified</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Risk Level:</span>
-                                  <span className="text-foreground font-medium">
-                                    {tx.compliance === 'Clear' ? 'Low' : tx.compliance === 'Review' ? 'Medium' : 'High'}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Sanctions:</span>
-                                  <span className="text-success font-medium">Clear</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Carbon Footprint Card */}
-                            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-                              <div className="flex items-center space-x-2">
-                                <LeafIcon className="h-4 w-4 text-teal" />
-                                <h4 className="font-semibold text-foreground">Carbon Impact</h4>
-                              </div>
-                              <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Emissions:</span>
-                                  <Badge className="bg-teal/10 text-teal border-teal/20">
-                                    {carbonKg} kg CO₂
-                                  </Badge>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Impact Level:</span>
-                                  <span className={`font-medium ${
-                                    carbonBand === 'Low' ? 'text-success' : 
-                                    carbonBand === 'Medium' ? 'text-warning' : 'text-destructive'
-                                  }`}>
-                                    {carbonBand}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Method:</span>
-                                  <span className="text-foreground font-medium">Digital Transfer</span>
-                                </div>
-                                <div className="pt-2 border-t border-border/50">
-                                  <Button variant="outline" size="sm" className="w-full text-teal border-teal/20 hover:bg-teal/10">
-                                    Offset Carbon Impact
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
+              
+              <div className="pt-4 border-t">
+                <Button variant="outline" className="w-full md:w-auto">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Summary
+                </Button>
+              </div>
+            </CardContent>
+          )}
         </Card>
       </div>
+      
+      {/* Footer */}
+      <footer className="border-t bg-card/50 py-8">
+        <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
+          © 2025 Aiva. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 };
