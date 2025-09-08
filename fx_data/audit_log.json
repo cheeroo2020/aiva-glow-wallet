@@ -1,0 +1,22 @@
+[
+  {
+    "event_id": "e05f2b029a234b0cbd75ea353af9c9e7",
+    "timestamp": "2025-09-08T10:20:53Z",
+    "event": "conversion_settled",
+    "pair": "EUR_USD",
+    "amount_src": 200.0,
+    "status": "clear",
+    "reason": "within limits",
+    "rules": []
+  },
+  {
+    "event_id": "96ae46bc36b64c9cbb8442d6d8e5d919",
+    "timestamp": "2025-09-08T10:22:10Z",
+    "event": "conversion_settled",
+    "pair": "EUR_USD",
+    "amount_src": 200.0,
+    "status": "clear",
+    "reason": "within limits",
+    "rules": []
+  }
+]
