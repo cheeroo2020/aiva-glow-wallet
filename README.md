@@ -16,7 +16,7 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ---
 
-## 🧱 Folder Structure (as of 06 September 2025)
+## 🧱 Folder Structure (as of 08 September 2025)
 ```
 ├── ai/ # Smart FX engine & simulations
 │   ├── fx_trend_analysis.py
@@ -29,6 +29,7 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 │   ├── balances.json          # starting USD/EUR/AUD balances
 │   ├── transactions_sample.json
 │   ├── transactions_log.json  # persistent enriched transaction log
+│   ├── audit_log.json         # structured audit log
 │   └── carbon_factors.json
 │
 ├── lovable_ui/ # UI exported from Lovable (Markdown + assets)
@@ -82,11 +83,11 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ## 📊 Sprint 3 Progress (1–15 Sep 2025)
 
-**Status as of 06 September 2025: Sprint 3 Kickoff completed**
+**Status as of 08 September 2025: Compliance enrichment in progress**
 
 | Task ID | Title | Status |
 |---------|-------|--------|
-| AIVA-46 | Compliance Rule Engine (thresholds) | ⏳ In Progress |
+| AIVA-46 | Compliance Rule Engine (thresholds) | ✅ Done |
 | AIVA-47 | Velocity & Pattern Checks (structuring) | ⏳ In Progress |
 | AIVA-48 | Enrich transaction log with compliance metadata | ⏳ In Progress |
 | AIVA-49 | Audit Logging framework | ⏳ In Progress |
@@ -95,13 +96,12 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 | AIVA-52 | Collapsible Compliance Panel UI | ⏳ In Progress |
 | AIVA-53 | Compliance Alerts UI | ⏳ In Progress |
 
-**Highlights Today (06 September 2025):**
-- Created new branch `sprint3/compliance` on GitHub.  
-- Synced and aligned GitHub Desktop with the website branch.  
-- Scaffolded `fx_data/audit_log.json`.  
-- Enhanced `ai/fx_conversion_sim.py` with full compliance rules: thresholds, velocity checks, sanctions mock.  
-- Added `append_audit` integration for recording audit events.  
-- Designed comprehensive Lovable prompt for modern fintech UI (dark mode toggle, collapsible compliance panel, timeline view, AI recommendation card).  
+**Highlights Today (08 September 2025):**
+- Enriched `fx_data/transactions_log.json` with compliance and carbon objects.  
+- Added structured `fx_data/audit_log.json` with conversion_attempt and conversion_settled events.  
+- Implemented compliance thresholds, velocity detection, and sanctions mock in `fx_conversion_sim.py`.  
+- Verified test runs: Clear (small trades), Review (>10k), Blocked (>50k), and velocity (≥3 trades in 60s).  
+- Jira updated: **AIVA-106 marked Done**, **AIVA-48 moved to In Progress**.  
 
 ---
 
@@ -116,19 +116,20 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 2. **Smart FX AI Engine (/ai)**  
    - fx_trend_analysis.py — trend detection.  
    - fx_trend_with_threshold.py — thresholds and convert/wait.  
-   - fx_conversion_sim.py — now upgraded with compliance thresholds, velocity, sanctions, enriched logging.  
+   - fx_conversion_sim.py — enriched with compliance thresholds, velocity checks, sanctions mock, and structured logging.  
    - carbon_estimator.py — CO₂ impact estimates.  
 
 3. **FX Data Store (/fx_data)**  
    - fxrates.json — 7-day FX rates.  
    - balances.json — mock balances.  
    - transactions_sample.json — legacy log.  
-   - transactions_log.json — new persistent enriched log with compliance + carbon.  
-   - audit_log.json — new audit trail for sensitive actions.  
+   - transactions_log.json — enriched log with compliance + carbon.  
+   - audit_log.json — new audit trail for sensitive events.  
+   - carbon_factors.json — mock carbon intensity data.  
 
 4. **Screenshots & Logs**  
    - CLI runs confirm enriched compliance + carbon outputs.  
-   - Logbook entry created in `main/logbook.md` for 6 Sep 2025.  
+   - Logbook entry created for 8 Sep 2025.  
 
 5. **Compliance & Risk Engine (Epic)**  
    - Compliance rules (thresholds, velocity, sanctions mock) implemented.  
@@ -140,10 +141,10 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ## 🧭 What’s Next
 - Continue Sprint 3 (until 15 Sep):  
-  - Extend compliance rules into UI.  
-  - Hook Lovable components to JSON compliance outputs.  
-  - Test review/blocked transaction flows with audit log capture.  
-- Plan Sprint 4: FastAPI + API layer for `/convert`, `/balances`, `/transactions`.  
+  - Integrate enriched JSON into Lovable UI.  
+  - Export timeline + compliance panel screenshots.  
+  - Test blocked/review flows against audit log.  
+- Prepare Sprint 4: FastAPI endpoints (`/convert`, `/balances`, `/transactions`).  
 
 ---
 
