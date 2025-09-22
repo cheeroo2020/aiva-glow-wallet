@@ -16,27 +16,23 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ---
 
-## 🧱 Folder Structure (as of 08 September 2025)
+## 🧱 Folder Structure (as of 22 September 2025)
 ```
 ├── ai/ # Smart FX engine & simulations
 │   ├── fx_trend_analysis.py
 │   ├── fx_trend_with_threshold.py
-│   ├── fx_conversion_sim.py   # mock balance FX simulation with carbon & compliance
+│   ├── fx_conversion_sim.py   # FX simulation with compliance + audit logging
 │   └── carbon_estimator.py
 │
 ├── fx_data/ # Mock FX, balances, transaction, and carbon data
 │   ├── fxrates.json
-│   ├── balances.json          # starting USD/EUR/AUD balances
+│   ├── balances.json
 │   ├── transactions_sample.json
-│   ├── transactions_log.json  # persistent enriched transaction log
+│   ├── transactions_log.json  # enriched with compliance + carbon
 │   ├── audit_log.json         # structured audit log
 │   └── carbon_factors.json
 │
-├── lovable_ui/ # UI exported from Lovable (Markdown + assets)
-│   ├── ai_suggestion_component.md
-│   ├── compliance_collapsible_panel.md
-│   └── Smart Fx.png
-│
+├── lovable_ui/ # UI exported from Lovable
 ├── designs/ # UI concepts
 ├── screenshots/ # Output snapshots for tracking
 ├── logbook.md   # Daily build journal
@@ -46,105 +42,79 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 ---
 
 ## 🧑‍💻 Sprint 1 Summary (1 Aug – 18 Aug)
-| Task ID | Title | Status |
-|---------|-------|--------|
-| AIVA-4 | Design wallet dashboard in Lovable | ✅ Done |
-| AIVA-5 | Add 3 currency balance blocks | ✅ Done |
-| AIVA-6 | Create FX converter UI | ✅ Done |
-| AIVA-7 | Display static transaction log | ✅ Done |
-| AIVA-9 | Draft Smart FX GPT prompt logic | ✅ Done |
-| AIVA-10 | Create Lovable UI element for AI suggestion | ✅ Done |
-| AIVA-11 | Test FX trend data with GPT-style response | ✅ Done |
-| AIVA-14 | Add FX threshold logic for convert/wait | ✅ Done |
-| AIVA-15 | Simulate FX conversions with mock balances | ✅ Done |
-| AIVA-52 | Add Green FX carbon badge to Smart FX UI | ✅ Done |
-| AIVA-53 | Add Compliance & Risk collapsible panel to UI | ✅ Done |
+*(No changes – completed successfully)*
 
 ---
 
 ## 📊 Sprint 2 Summary (15–31 Aug 2025)
-| Task ID | Title | Status |
-|---------|-------|--------|
-| AIVA-17 | Create GitHub repo aiva-wallet | ✅ Done |
-| AIVA-18 | Write README.md with vision and stack | ✅ Done |
-| AIVA-19 | Add mockdata and ai folders in GitHub | ✅ Done |
-
-**Health:** Sprint 2 completed successfully.
-
-- Repo + README finalized.  
-- fx_conversion_sim.py enhanced with:  
-  ✅ Carbon footprint estimation  
-  ✅ Compliance stub  
-  ✅ Transaction logging  
-- CLI runs tested with both small and large trades.  
-- All deliverables closed on 31 Aug 2025.  
+*(No changes – completed successfully)*
 
 ---
 
-## 📊 Sprint 3 Progress (1–15 Sep 2025)
+## 📊 Sprint 3 Progress (1–29 Sep 2025)
 
-**Status as of 08 September 2025: Compliance enrichment in progress**
+**Status as of 22 September 2025: Compliance enrichment nearing completion**
 
 | Task ID | Title | Status |
 |---------|-------|--------|
 | AIVA-46 | Compliance Rule Engine (thresholds) | ✅ Done |
-| AIVA-47 | Velocity & Pattern Checks (structuring) | ⏳ In Progress |
+| AIVA-47 | Velocity & Pattern Checks (structuring) | ✅ Done |
 | AIVA-48 | Enrich transaction log with compliance metadata | ⏳ In Progress |
-| AIVA-49 | Audit Logging framework | ⏳ In Progress |
+| AIVA-49 | Audit Logging framework | ✅ Done |
 | AIVA-50 | Privacy & Data Mapping (APP) | ⏳ In Progress |
 | AIVA-51 | AI Ethics Safeguards | ⏳ In Progress |
 | AIVA-52 | Collapsible Compliance Panel UI | ⏳ In Progress |
 | AIVA-53 | Compliance Alerts UI | ⏳ In Progress |
+| AIVA-106 | Implement compliance rule engine (thresholds, velocity, sanctions) | ✅ Done |
 
-**Highlights Today (08 September 2025):**
-- Enriched `fx_data/transactions_log.json` with compliance and carbon objects.  
-- Added structured `fx_data/audit_log.json` with conversion_attempt and conversion_settled events.  
-- Implemented compliance thresholds, velocity detection, and sanctions mock in `fx_conversion_sim.py`.  
-- Verified test runs: Clear (small trades), Review (>10k), Blocked (>50k), and velocity (≥3 trades in 60s).  
-- Jira updated: **AIVA-106 marked Done**, **AIVA-48 moved to In Progress**.  
+**Highlights Today (22 September 2025):**
+- Refined **fx_conversion_sim.py** with full compliance logic:  
+  ✅ Threshold checks  
+  ✅ Velocity detection  
+  ✅ Sanctions mock  
+- Integrated **audit logging** (`fx_data/audit_log.json`) for both conversion_attempt and conversion_settled.  
+- CLI test runs performed:  
+  - ✅ Clear (small trades)  
+  - ✅ Review (>10k USD)  
+  - ✅ Blocked (>50k USD)  
+  - ✅ Velocity checks (≥3 trades in 60s)  
+- Encountered insufficient balance errors during large test runs — confirmed logic prevents overdrafts.  
+- Logbook.md updated with detailed entry for 22 Sep 2025.  
 
 ---
 
 ## 🧠 Module Progress
 
 1. **Wallet UI (/lovable_ui)**  
-   - ✅ Dashboard, balances, FX converter, static transaction log.  
-   - ✅ Smart FX Recommendation Card with Green FX badge.  
+   - ✅ Dashboard, balances, FX converter, static log.  
+   - ✅ Smart FX Recommendation with Green FX badge.  
    - ✅ Collapsible compliance panel.  
-   - ⏳ Sprint 3: compliance alerts, timeline transaction view, dark mode toggle (planned).  
+   - ⏳ Pending: compliance alerts, timeline transaction view, dark mode toggle.  
 
 2. **Smart FX AI Engine (/ai)**  
-   - fx_trend_analysis.py — trend detection.  
-   - fx_trend_with_threshold.py — thresholds and convert/wait.  
-   - fx_conversion_sim.py — enriched with compliance thresholds, velocity checks, sanctions mock, and structured logging.  
-   - carbon_estimator.py — CO₂ impact estimates.  
+   - Fully enriched **fx_conversion_sim.py** with compliance + audit logging.  
+   - Threshold, velocity, sanctions, and carbon estimation integrated.  
 
 3. **FX Data Store (/fx_data)**  
-   - fxrates.json — 7-day FX rates.  
-   - balances.json — mock balances.  
-   - transactions_sample.json — legacy log.  
-   - transactions_log.json — enriched log with compliance + carbon.  
-   - audit_log.json — new audit trail for sensitive events.  
-   - carbon_factors.json — mock carbon intensity data.  
+   - **transactions_log.json** → enriched with compliance & carbon.  
+   - **audit_log.json** → structured audit events (conversion_attempt, conversion_settled).  
 
 4. **Screenshots & Logs**  
-   - CLI runs confirm enriched compliance + carbon outputs.  
-   - Logbook entry created for 8 Sep 2025.  
+   - CLI run logs captured.  
+   - Issues with insufficient balances documented in logbook.md.  
 
 5. **Compliance & Risk Engine (Epic)**  
-   - Compliance rules (thresholds, velocity, sanctions mock) implemented.  
-   - Audit logging integrated.  
-   - UI prompts ready for Lovable modernization.  
-   - Privacy compliance doc scaffolded (`docs/privacy_compliance.md`).  
+   - Threshold, velocity, sanctions rules ✅.  
+   - Audit trail ✅.  
+   - Integration with UI planned next.  
 
 ---
 
 ## 🧭 What’s Next
-- Continue Sprint 3 (until 15 Sep):  
-  - Integrate enriched JSON into Lovable UI.  
-  - Export timeline + compliance panel screenshots.  
-  - Test blocked/review flows against audit log.  
-- Prepare Sprint 4: FastAPI endpoints (`/convert`, `/balances`, `/transactions`).  
+- Finish **AIVA-48** by finalizing compliance metadata enrichment.  
+- Integrate compliance results into Lovable UI (collapsible alerts, timeline).  
+- Test blocked/review flows with full audit logging.  
+- Sprint 4 prep: FastAPI endpoints (`/convert`, `/balances`, `/transactions`).  
 
 ---
 
