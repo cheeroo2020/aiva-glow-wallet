@@ -30,30 +30,12 @@ AUDIT_LOG_PATH        = Path("fx_data/audit_log.json")
 
 SUPPORTED = {"USD", "EUR", "AUD"}
 
-
 # ---------- Compliance Config (simple, JSON-free for now) ----------
-# If you want to move these into a JSON later, keep same keys.
 COMPLIANCE_CONFIG = {
-    "amount_thresholds": {
-        # amounts in SOURCE currency units
-        "review": 10_000.0,   # > review -> "review"
-        "blocked": 50_000.0,  # > blocked -> "blocked"
-    },
-    "velocity": {
-        "window_seconds": 60,  # look-back window
-        "min_count": 3,        # >= min_count in window -> "review"
-        # scope: "any" (any pair), "by_src" (same src), "by_pair" (same src->dst)
-        "scope": "by_src"
-    },
-    "sanctions": {
-        # simple pair blacklist (use "ANY" to apply to all dst for a given src)
-        "blocked_pairs": [
-            # examples:
-            # "USD_RUS", "ANY_IRR"
-        ]
-    }
+    "amount_thresholds": {"review": 10_000.0, "blocked": 50_000.0},
+    "velocity": {"window_seconds": 60, "min_count": 3, "scope": "by_src"},
+    "sanctions": {"blocked_pairs": []}  # e.g. ["USD_RUS", "ANY_IRR"]
 }
-
 
 # ---------- Small JSON helpers ----------
 def load_json_ordered(path: Path):
@@ -88,6 +70,59 @@ def append_audit(event: dict):
     audit.append(event)
     save_json(AUDIT_LOG_PATH, audit)
 
+# ---------- Audit schema helpers (NEW) ----------
+AUDIT_SCHEMA_VERSION = "1.0"
+
+def _severity_for(status: str, rules: list[str]) -> str:
+    """
+    blocked -> high, review -> medium, clear -> low
+    """
+    s = (status or "").lower()
+    if s == "blocked":
+        return "high"
+    if s == "review":
+        return "medium"
+    return "low"
+
+def _actor_info() -> dict:
+    """
+    Placeholder until you add auth; swap later for real user/session IDs.
+    """
+    return {"user_id": "local_dev", "session_id": "cli"}
+
+def write_audit(
+    *,
+    event: str,            # "conversion_attempt" | "conversion_settled"
+    tx_id: str,
+    pair: str,
+    fx_date_used: str | None,
+    rate: float | None,
+    amount_src: float,
+    amount_dst: float | None,
+    status: str,
+    reason: str,
+    rules: list[str],
+) -> None:
+    event_doc = {
+        "event_id": uuid.uuid4().hex,
+        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "schema": {"name": "aiva.audit", "version": AUDIT_SCHEMA_VERSION},
+        "event": event,
+        "tx_id": tx_id,
+        "pair": pair,
+        "fx_date_used": fx_date_used,
+        "rate": round(rate, 6) if isinstance(rate, (float, int)) else None,
+        "amount_src": round(amount_src, 2),
+        "amount_dst": round(amount_dst, 2) if isinstance(amount_dst, (float, int)) else None,
+        "compliance": {
+            "status": status,
+            "reason": reason,
+            "rules_triggered": rules,
+            "severity": _severity_for(status, rules),
+        },
+        "actor": _actor_info(),
+    }
+    append_audit(event_doc)
 
 # ---------- FX rate helpers ----------
 def latest_day_rates(fx):
@@ -150,7 +185,6 @@ def get_rate(day_rates: dict, src: str, dst: str) -> float:
         f"Check fx_data/fxrates.json (need USD_AUD and/or EUR_AUD)."
     )
 
-
 # ---------- Carbon ----------
 def load_carbon_factor(pair_key: str) -> float:
     """
@@ -175,14 +209,11 @@ def carbon_badge(kg: float) -> str:
         return "Medium"
     return "High"
 
-
 # ---------- Compliance ----------
 def _now_utc() -> datetime:
     return datetime.utcnow()
 
 def _parse_iso(ts: str) -> datetime:
-    # transactions_log uses UTC "YYYY-mm-ddTHH:MM:SSZ"
-    # Accept trailing Z; strip if present
     if ts.endswith("Z"):
         ts = ts[:-1]
     return datetime.fromisoformat(ts)
@@ -269,7 +300,6 @@ def compliance_check(amount_src: float, src: str, dst: str) -> dict:
         dst=dst
     )
     if count >= vel_cfg["min_count"]:
-        # escalate: blocked if already review, else review
         if status == "review":
             status = "blocked"
             reason = f"{reason} + velocity >= {vel_cfg['min_count']} in {vel_cfg['window_seconds']}s"
@@ -280,14 +310,12 @@ def compliance_check(amount_src: float, src: str, dst: str) -> dict:
 
     return {"status": status, "reason": reason, "rules_triggered": rules}
 
-
 # ---------- Formatting ----------
 def fmt_money(x: float) -> str:
     return f"{x:,.2f}"
 
 def fmt_kg(x: float) -> str:
     return f"{x:.2f} kg CO₂"
-
 
 # ---------- Core simulation ----------
 def simulate(src: str, dst: str, amount: float):
@@ -338,16 +366,20 @@ def simulate(src: str, dst: str, amount: float):
             "compliance": comp
         }
         append_tx_log(tx_entry)
-        append_audit({
-            "event_id": uuid.uuid4().hex,
-            "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-            "event": "conversion_attempt",
-            "pair": pair_key,
-            "amount_src": round(amount, 2),
-            "status": "blocked",
-            "reason": comp["reason"],
-            "rules": comp["rules_triggered"]
-        })
+
+        # NEW standardized audit writer
+        write_audit(
+            event="conversion_attempt",
+            tx_id=tx_entry["tx_id"],
+            pair=pair_key,
+            fx_date_used=latest_date,
+            rate=rate,
+            amount_src=amount,
+            amount_dst=0.0,
+            status=comp["status"],
+            reason=comp["reason"],
+            rules=comp["rules_triggered"],
+        )
 
         # Output summary
         print("[FX Conversion Simulation]")
@@ -381,26 +413,27 @@ def simulate(src: str, dst: str, amount: float):
             "EUR": balances.get("EUR", 0.0),
             "AUD": balances.get("AUD", 0.0),
         },
-        "carbon": {
-            "kg": round(co2_kg, 2),
-            "badge": badge
-        },
+        "carbon": {"kg": round(co2_kg, 2), "badge": badge},
         "compliance": comp
     }
 
     # Persist changes
     save_json(BALANCES_PATH, balances)
     append_tx_log(tx_entry)
-    append_audit({
-        "event_id": uuid.uuid4().hex,
-        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "event": "conversion_settled",
-        "pair": pair_key,
-        "amount_src": round(amount, 2),
-        "status": comp["status"],
-        "reason": comp["reason"],
-        "rules": comp["rules_triggered"]
-    })
+
+    # NEW standardized audit writer
+    write_audit(
+        event="conversion_settled",
+        tx_id=tx_entry["tx_id"],
+        pair=pair_key,
+        fx_date_used=latest_date,
+        rate=rate,
+        amount_src=amount,
+        amount_dst=received,
+        status=comp["status"],
+        reason=comp["reason"],
+        rules=comp["rules_triggered"],
+    )
 
     # ---- Output ----
     print("[FX Conversion Simulation]")
@@ -421,12 +454,11 @@ def simulate(src: str, dst: str, amount: float):
     print("\nImpact & Controls:")
     print(f"  Carbon: {fmt_kg(co2_kg)}  ({badge})  |  Compliance: {comp['status'].upper()} ({comp['reason']})")
     if comp["rules_triggered"]:
-        print(f"  Rules: {', '.join(comp['rules_triggered'])}")
+        print(f"  Rules: {comma_join(comp['rules_triggered']) if 'comma_join' in globals() else ', '.join(comp['rules_triggered'])}")
 
     print("\nOne-liner:")
     print(f"  {src}->{dst} @ {rate:.4f} | {fmt_money(amount)} {src} → {fmt_money(received)} {dst} "
           f"| CO₂ {fmt_kg(co2_kg)} ({badge}) | {comp['status'].upper()} ({comp['reason']})")
-
 
 # ---------- CLI ----------
 def main():
@@ -443,7 +475,6 @@ def main():
         sys.exit(1)
 
     simulate(src, dst, amount)
-
 
 if __name__ == "__main__":
     main()
