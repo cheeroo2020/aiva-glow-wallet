@@ -18,5 +18,30 @@
     "status": "clear",
     "reason": "within limits",
     "rules": []
+  },
+  {
+    "event_id": "441f39e46721412f9991f6f9e52450a3",
+    "timestamp": "2025-09-22T10:01:51Z",
+    "schema": {
+      "name": "aiva.audit",
+      "version": "1.0"
+    },
+    "event": "conversion_settled",
+    "tx_id": "c2f4817dd5a94a3aaf9a8b81d54497cd",
+    "pair": "EUR_USD",
+    "fx_date_used": "2025-08-07",
+    "rate": 1.073333,
+    "amount_src": 50.0,
+    "amount_dst": 53.67,
+    "compliance": {
+      "status": "clear",
+      "reason": "within limits",
+      "rules_triggered": [],
+      "severity": "low"
+    },
+    "actor": {
+      "user_id": "local_dev",
+      "session_id": "cli"
+    }
   }
 ]
