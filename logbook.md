@@ -1158,3 +1158,55 @@ Tomorrow: extend compliance UI in Lovable, finalize Sprint 3 commits, and begin 
 - Hook enriched JSON into Lovable UI (timeline + collapsible compliance panel).
 - Export screenshots of UI updates for Sprint 3 deliverables.
 - Plan for Sprint 4 API endpoints (/balances, /convert, /transactions).
+
+---
+
+# 📘 Aiva Glow Wallet – Daily Logbook  
+**Date:** 22 Sep 2025  
+
+---
+
+## ✅ Activities Completed
+- Continued work on **AIVA-48: Enrich transaction log with compliance metadata**.  
+- Enhanced `fx_conversion_sim.py` with compliance integration:  
+  - Threshold rules (review > 10k, blocked > 50k).  
+  - Velocity rules (structuring detection).  
+  - Sanctions mock checks (pair blacklist support).  
+- Added **audit logging** via `fx_data/audit_log.json` to record:  
+  - `conversion_settled` events for clear/review transactions.  
+  - `conversion_attempt` events for blocked transactions.  
+- Verified schema for audit events (`event_id`, `timestamp`, `event`, `pair`, `amount_src`, `status`, `reason`, `rules`).  
+- Attempted to test review/blocked scenarios but **insufficient USD balance** caused simulation to fail at the balance check.  
+
+---
+
+## 🐞 Issues Faced
+- Balance was too low (`USD ~ 5,483`) for triggering high-value transactions (`15k` and `60k`).  
+- As a result, compliance `review` and `blocked` events could not be simulated in the current run.  
+
+---
+
+## 🔧 Workarounds Discussed
+1. **Option A – Lower Thresholds:**  
+   - Adjust compliance thresholds to `review=2,000` and `blocked=4,000`.  
+   - Run test transactions (50 EUR → USD, 3k USD → AUD, 5k USD → AUD) to generate all 3 cases.  
+
+2. **Option B – Top Up Balances:**  
+   - Edit `fx_data/balances.json` to increase USD balance (e.g., 120,000).  
+   - Run transactions with original thresholds (10k/50k).  
+
+---
+
+## 📝 Next Steps
+- Choose between **lowering thresholds** or **topping up balances** to simulate review and blocked events.  
+- Run three test transactions (clear/review/blocked) to confirm audit log enrichment.  
+- Commit results with structured commit messages:  
+  - `test(compliance): lower review/blocked thresholds for audit demos`  
+  - `chore(data): top up balances.json for high-value compliance tests`  
+  - `chore(audit): add demo clear/review/blocked events to audit_log.json`  
+
+---
+
+## 📌 Reflection
+Today’s progress was a major milestone in implementing **compliance metadata and audit logging**. While test coverage was limited due to wallet balances, the underlying compliance engine logic and audit schema are now in place. Tomorrow’s focus is to generate complete audit trails for **clear, review, and blocked** scenarios.
+
