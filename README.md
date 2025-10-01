@@ -16,7 +16,7 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ---
 
-## 🧱 Folder Structure (as of 22 September 2025)
+## 🧱 Folder Structure (Reset on 1 October 2025)
 ```
 ├── ai/                       # Smart FX engine & simulations
 │   ├── fx_trend_analysis.py
@@ -37,11 +37,21 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 │   ├── compliance_collapsible_panel.md
 │   └── Smart Fx.png
 │
+├── compliance/               # NEW: compliance-first reset
+│   ├── kyc_flow.md           # KYC/AML notes and flows
+│   ├── risk_log.json         # Risk factors log
+│
 ├── designs/                  # UI concepts
 ├── screenshots/              # Output snapshots for tracking
 ├── docs/
-│   ├── audit_log_schema.md   # NEW: v1 schema for audit events
-│   └── privacy_compliance.md # (scaffold planned)
+│   ├── Mission.md            # Reset vision pillars
+│   ├── audit_log_schema.md   # Schema for audit events
+│   ├── privacy_compliance.md # Privacy + compliance scaffolding
+│   ├── governance.md         # Governance and regulator engagement notes
+│   └── ai_ethics.md          # AI safety & ethics documentation
+│
+├── tests/                    # OCR, compliance, and anchoring test results
+│   ├── ocr_results.md
 │
 ├── logbook.md                # Daily build journal
 └── README.md                 # Project overview
@@ -106,6 +116,19 @@ Aiva is a build + learn journey to explore how the future of money is being shap
 
 ---
 
+## 🔄 Reset (1 Oct 2025)
+- **New 90-day plan launched (Oct–Dec 2025).**
+- Repo restructured with compliance-first focus:
+  - `/compliance`, `/docs`, `/tests` created.  
+  - Drafted **Mission.md** with 4 core pillars:  
+    1. Borderless multi-currency wallet  
+    2. Compliance-first design  
+    3. Blockchain-anchored statements  
+    4. AI-resistant, auditor-friendly exports  
+- Logbook updated to mark reset milestone.  
+
+---
+
 ## 🧠 Module Progress
 1. **Wallet UI (/lovable_ui)**  
    - ✅ Dashboard, balances, FX converter, static log.  
@@ -121,22 +144,25 @@ Aiva is a build + learn journey to explore how the future of money is being shap
    - `transactions_log.json` → enriched with compliance & carbon.  
    - `audit_log.json` → standardized audit events (`conversion_attempt`, `conversion_settled`).  
 
-4. **Screenshots & Logs**  
-   - CLI run logs captured.  
-   - Insufficient-balance cases documented in logbook.  
+4. **Compliance (/compliance)**  
+   - Reset structure added.  
+   - `kyc_flow.md` scaffolded.  
+   - `risk_log.json` scaffolded.  
 
-5. **Compliance & Risk Engine (Epic)**  
-   - Threshold, velocity, sanctions rules ✅.  
-   - Audit trail ✅.  
-   - UI wiring next.  
+5. **Docs (/docs)**  
+   - `Mission.md` reset pillars defined.  
+   - Privacy, governance, and AI ethics files scaffolded.  
+
+6. **Tests (/tests)**  
+   - OCR and compliance test logs to be added (Nov 2025).  
 
 ---
 
 ## 🧭 What’s Next
-- Finish **AIVA-48** by generating demo data for clear/review/blocked and wiring to UI.  
-- Integrate compliance results into Lovable UI (collapsible alerts, timeline).  
-- Test blocked/review flows end-to-end with audit log verification.  
-- Prepare Sprint 4: FastAPI endpoints (`/convert`, `/balances`, `/transactions`).  
+- Complete reset tasks: fill Mission.md, draft KYC flow, add first risk log.  
+- Resume Sprint 3 compliance enrichment.  
+- Begin Sprint 4 in October: FastAPI endpoints (`/convert`, `/balances`, `/transactions`).  
+- Prototype Cloked Compliance: statement hashing + blockchain anchoring + cloaked exports.  
 
 ---
 
