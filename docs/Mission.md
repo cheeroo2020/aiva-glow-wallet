@@ -1,0 +1,4 @@
+- Borderless multi-currency wallet
+- Compliance-first design
+- Blockchain anchored statements
+- AI-resistent, auditor friendly exports
