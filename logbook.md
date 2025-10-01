@@ -1210,3 +1210,26 @@ Tomorrow: extend compliance UI in Lovable, finalize Sprint 3 commits, and begin 
 ## 📌 Reflection
 Today’s progress was a major milestone in implementing **compliance metadata and audit logging**. While test coverage was limited due to wallet balances, the underlying compliance engine logic and audit schema are now in place. Tomorrow’s focus is to generate complete audit trails for **clear, review, and blocked** scenarios.
 
+----
+
+# Logbook — 01 Oct 2025
+
+## Tasks Completed
+- Created foundational repo structure with folders:
+  - `/compliance`
+  - `/docs`
+  - `/tests`
+- Added seed files:
+  - `/docs/Mission.md`
+  - `/compliance/kyc_flow.md`
+  - `/compliance/risk_log.json`
+- Drafted **Mission.md** with 4 core pillars:
+  1. Borderless multi-currency wallet
+  2. Compliance-first design
+  3. Blockchain-anchored statements
+  4. AI-resistant, auditor-friendly exports
+
+## Reflections
+- Today marks the official **reset** of Aiva’s 90-day plan (Oct–Dec 2025).
+- Even though progress feels small, creating the structure gives clarity and momentum.
+- Tomorrow’s focus: begin filling out Mission.md in more detail and map first compliance learning notes.
